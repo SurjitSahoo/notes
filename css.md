@@ -144,19 +144,83 @@ child elements get the styles of parent elements
 
 Combinator | Description | Example
 ----------|-------------|--------------
-h2 + p | Adjacent Sibling.<br />h2 k direct bad p | ![1564387310247](/home/ad.msystechnologies.com/ssahoo/.config/Typora/typora-user-images/1564387310247.png) 
-h2 ~ p | General Sibling<br />h2 k bad on same level, chahe kahi v ho | ![1564387493428](/home/ad.msystechnologies.com/ssahoo/.config/Typora/typora-user-images/1564387493428.png) 
-div > p | Child<br />direct child, not nested | ![1564387562604](/home/ad.msystechnologies.com/ssahoo/.config/Typora/typora-user-images/1564387562604.png) 
-div p | Descendant<br />Any child | ![1564387626986](/home/ad.msystechnologies.com/ssahoo/.config/Typora/typora-user-images/1564387626986.png) 
+h2 + p | Adjacent Sibling.<br />h2 k direct bad p | ` <div>`<br />    `<h2>Not Applied</h2>`<br />    <p> **==APPLIED==** </p><br />    `<h2>Not Applied</h2>`<br />    `<h3>Not Applied</h3>`<br />    `<p>Not Applied</p>`<br />    `<h2>Not Applied</h2>`<br />    <p> **==APPLIED==** </p><br />`</div>` 
+h2 ~ p | General Sibling<br />h2 k bad on same level, chahe kahi v ho | `<div>`<br />    `<h2>Not Applied</h2>`<br />    <p> **==APPLIED==** </p><br />    `<h2>Not Applied</h2>`<br />    `<h3>Not Applied</h3>`<br />    <p> **==APPLIED==** </p><br />`</div>` 
+div > p | Child<br />direct child, not nested | `<div>`<br />    `<div>Not Applied</div>`<br />    <p> **==APPLIED==** </p><br />    `<div>Not Applied</div>`<br />    `<article>`<br />          `<p>Not Applied</p>`<br />    `</article>`<br />    <p> **==APPLIED==** </p><br />`</div>` 
+div p | Descendant<br />Any child | `<div>`<br/>     `<div>Not applied</div>`<br/>     <p> **==APPLIED==** </p><br/>     `<div>Not applied</div>`<br/>     `<article>`<br/>            <p> **==APPLIED==** </p><br/>     `</article>`<br/>     <p> **==APPLIED==** </p><br/> `</div>` 
 
 
 
 ## Positioning 
 
+top, right, bottom, left properties won’t work unless `position` property is set first.
+
 Position | Behaviour 
 ------------|-----------
 static | default 
-fixed | out of the document flow<br />height and width are relative to the view-port 
-absolute | Out of the document flow<br />if it’s parent have position property defined, height & width are relative to parent<br />it parent doesn’t have position property, height & width are relative to document body 
-relative | In the document flow<br />height and width relative to itself 
+fixed | out of the document flow<br />top, right, bottom, left are relative to the view-port<br />as it’s related to view-port, it stays at the same position if we scroll the page 
+absolute | Out of the document flow<br />if it’s parent have position property defined, height & width are relative to parent<br />it parent doesn’t have position property, position if relative to document body 
+relative | In the document flow<br />position is relative to itself 
+sticky | In the document flow<br />position is relative to view-port<br />if we apply `top: 0px;` the element will stick at the top(view-port) when we scroll<br />It only sticks till it’s parent is visible in the view-port, once we scroll it’s parent out of the view port, the element disappears. 
+
+
+
+## Background
+
+```css
+background-color: red;																				// set solid/gradient background
+background-image: url("image.jpg");														// set the background image
+
+background-size: widhth height;																// set width and height in px
+background-size: 100%;																				// takes full width and crops height to adjust
+background-size: cover;																				// crops image in a way it covers properly
+background-size: contain;																			// displays whole image
+background-size: 100px;																				// one value referes to the widht, it'll repeat
+
+background-repeat: no-repeat / repeat-x / repeat-y						// set repeat
+
+background-position: 10px 20px;																// 10px from left and 20px from top of the container
+background-position: 10% 20%;																	// it only works if the image has remaining area
+background-position: center;																	// same as 50% 50%
+background-position: left top;																// same as 0% 0%
+
+background-origin: border-box / content-box / padding-box			// similar to 'box-sizing
+```
+
+`background-position: 10% 20%`
+
+- If the image’s height is 100% then width will be cropped to fit the image in the container. 
+  * cropping 10%(of area to be cropped) from left will make the image crop 90%(of area to be cropped) from the right.
+  * as only 10% is cropped from the left so the image will move to the right.
+- if the image’s width is 100% then the height will be cropped to fit the image in the container.
+  - cropping 20%(of the area to be cropped) from the top and 90% from the bottom.
+  - it’ll make the image move down as only 10% is being cropped from the top.
+
+## Image
+
+```html
+<style>
+  .someClass {
+    height: 20px;
+    width: 30px;
+    display: inline-block;
+  }
+  .someClass img {
+    height: 100%;
+    width: 100%
+  }
+</style>
+
+<!--
+here <a> is in inline element. So if we apply height/width as 100% to the clild <img> then Image will take it's original size(100%), not it's parent's.
+
+So to use height/width with respect to it's parent change the parent element <a> to a block or inline-block element.
+-->
+
+<a href="#" class="someClass">
+	<img src="image.jpg" alt="logo" />
+</a>
+```
+
+==either change parent to inline block and use percentage for image width and height or use absolute pixel values.==
 
