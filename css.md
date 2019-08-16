@@ -196,7 +196,7 @@ background-origin: border-box / content-box / padding-box			// similar to 'box-s
   - cropping 20%(of the area to be cropped) from the top and 90% from the bottom.
   - it’ll make the image move down as only 10% is being cropped from the top.
 
-## Image
+#### Image
 
 ```html
 <style>
@@ -223,4 +223,79 @@ So to use height/width with respect to it's parent change the parent element <a>
 ```
 
 ==either change parent to inline block and use percentage for image width and height or use absolute pixel values.==
+
+#### Gradient
+
+```css
+background-image: linear-gradient(30deg, red 50%, blue, green, yellow)
+background-image: radial-gradient(circle at top, red, blue, green)
+background-image: radial-gradient(circle at 20% 50%, red, blue, green)  //20% from left and 50% from right
+background-image: radial-gradient(circle 20px at 20% 50%, red, blue, green)
+background-image: radial-gradient(ellipse 20px 40px at 20% 50%, red, blue, green)
+background-image: radial-gradient(ellipse fartheset-side at 20% 50%, red, blue, green)
+background-image: radial-gradient(ellipse closest-side at 20% 50%, red, blue, green)
+background-image: radial-gradient(ellipse closest-corner at 20% 50%, red, blue, green)
+```
+
+#### Filter
+
+```css
+filter: grayscale(40%)
+				blur(5px)
+				contrast(200%)
+```
+
+## Responsive Design
+
+Hardware pixels vs Software pixels [mydevice.io](MyDevice.io)
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0,
+                               user-scalable=yes" >
+```
+
+```css
+@media(condition){
+  selector {
+    rules;
+  }
+}
+
+@media(min-width: 40rem) and/or (min-height: 30rem)					// logical operators
+(orientation: langscape)
+```
+
+## FlexBox
+
+```css
+.flex-container {
+  display: flex														/* flexBox ->  applies default flex-direction: row, wrap: nowrap */
+    			 inline-flex;										/* doesn't take full width, just like inline-block               */
+  flex-direction: row											/* put the elements on row                                       */
+    							row-reverse							/* put the elements on row in reverse order                      */
+    							column									/* put the elements on column                                    */
+    							column-reverse;					/* put the elements on column in reverse order                   */
+  flex-wrap: nowrap												/* default -> display everything on row or column                */
+    				 wrap													/* wrap if necessary -> shifts the elements down on row          */
+    				 wrap-reverse;								/* wrap if necessary -> shifts the elements up on row            */
+  flex-flow: row wrap;										/* Shorthand for direction and wrap                              */
+  justify-content: flex-start							/* stick everything to the left           (main axis)            */
+    							 flex-end								/* stick everything to the right					(main axis) 					 */
+    							 center									/* place everything at center             (main axis)            */
+    							 space-around						/* Distrubute empty space evenly around the elements (main axis) */
+    							 space-between;					/* Distribute empty space between the elements  (main axis)      */
+  align-items: center											/* Vertically align at the center         (cross axis)           */
+    					 flex-start									/* Align at the top                       (cross axis)           */
+    					 flex-end										/* Align at the bottom                    (cross axis)           */
+    					 stretch										/* Stretch the height                     (cross axis)           */
+    				   baseline;									/* align on basis of content base line    (cross axis)           */
+}
+
+.flex-items {
+  order: 1/2/3...;												/* at what position should item be displayed                     */
+  align-self: flex-start;									/* align single element   (cross axis)                           */
+  flex-grow: 1/2/3....;										/* empty space is divided by shares and added to the elements    */
+  flex-shrink: 1/2/3...;									/* allow element to shrink beyond it's size. by what share -> no */
+}
+```
 
