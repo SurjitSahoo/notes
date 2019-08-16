@@ -296,6 +296,25 @@ Hardware pixels vs Software pixels [mydevice.io](MyDevice.io)
   align-self: flex-start;									/* align single element   (cross axis)                           */
   flex-grow: 1/2/3....;										/* empty space is divided by shares and added to the elements    */
   flex-shrink: 1/2/3...;									/* allow element to shrink beyond it's size. by what share -> no */
+  flex-basis: 100px / 10%;								/* initial length of item along main axis (%of container)        */
 }
 ```
 
+## Grid
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: 100px 2fr 20% 3fr;	/* defined 4 columns 100px, 2/5(100%-20% - 100px) and so on      */
+  grid-template-rows: 
+}
+
+.grid-element {								              /* define how many blocks element will take                      */
+  grid-column-start: 3;
+  grid-column-end: 5;
+  grid-row-start: line-no;
+  grid-row-end: line-no;
+}
+```
+
+- If we’ve defined 4 columns then the remaining elements will be positioned below the first row.
