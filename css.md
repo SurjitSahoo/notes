@@ -54,6 +54,13 @@ div[class*="text"] {     											//[name="someName"], [name*="name"] any attr
   // class="text_first"
   // class="text"
 }
+
+[class^="text"] {
+  all class names starting with "text"
+}
+[class$="text"] {
+  all class names ending with "text"
+}
 ```
 
 #### :not( selector )
@@ -228,6 +235,7 @@ So to use height/width with respect to it's parent change the parent element <a>
 
 ```css
 background-image: linear-gradient(30deg, red 50%, blue, green, yellow)
+background-image: linear-gradient(to right bottom, red 50%, blue, green, yellow)
 background-image: radial-gradient(circle at top, red, blue, green)
 background-image: radial-gradient(circle at 20% 50%, red, blue, green)  //20% from left and 50% from right
 background-image: radial-gradient(circle 20px at 20% 50%, red, blue, green)
@@ -299,6 +307,234 @@ Hardware pixels vs Software pixels [mydevice.io](MyDevice.io)
   flex-basis: 100px / 10%;								/* initial length of item along main axis (%of container)        */
 }
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==#####################################################################################################################==
+==##############################################== Advanced CSS ==##########################################################==
+==#####################################################################################################################==
+
+
+
+#### Important properties
+
+```CSS
+clip-path: polygon(coordinate, coordinate, ...);
+background-image: image1, image2, image3...;
+background-size: cover;
+background-position: top;
+
+font-family: sans-serif
+font-weight: 400;
+font-size: 16px;
+line-height: 1.4;
+letter-spacing: 10px;                       /* spacing between letters                                        */
+```
+
+## Animations
+
+```css
+.animated-class {
+  animation-name: animationName;
+  animation-duration: 5s;
+  animation-iteration-count: 3;
+  animation-delay: 3s;
+  animation-timing-function: ease / ease-out / ease-in / ease-in-out
+}
+
+@keyframes animationName {
+  0% {
+  	opacity: 0;  
+    transform: translateX(-100px);
+  }
+  
+  80% {
+    tranfsorm: translateX(10px);
+  }
+  
+  100%{
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+```
+
+@keyframe: Advanced, gives more control to the user
+transition: prints the screen slowly, so it looks like printed
+
+## pseudo class | pseudo element
+
+```css
+.btn:link,													/* use , to defin styling for multipl selector                             */	
+.btn:visited {											/* :pseudo-class -> hover, etc                                             */
+  text-transform: uppercase;
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+  border-radius: 100px;
+  transition: all .2s;						/* ANIMATION                                                                 */
+}
+
+.btn:hover {
+  transform: translateY(-3px);	/* when hovered -> goes up by 3px                                              */
+  box-shadow: 0 10px 20px rgba(0,0,0, .2);
+}
+
+.btn:active {
+  transform: translateY(-1px); /* when clicked -> goes up by 1px                                               */
+  box-shadow: 0 5px 10px rgba(0,0,0, .2s);
+}
+
+
+/*
+* Here pseudo element is a semi transparent btn that's behind the main button and comes out and fades away when we hover. It comes back goes behind the main button when we move away from the button
+*/
+
+.btn::after {								/* ::pseudo-element -> same config as the main element                             */
+  content: ""; 							/* necesary -> if skipped, element won't be there                                  */
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  border-radius: 100ps;
+  position: absolute; 		/* reference should be main button .btn { position: relative; }                      */
+  top: 0;
+  left: 0;
+  background-color: white;
+  transition: all .2s;    /* animate the pseudo element                                                       */
+}
+
+.btn:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
+}
+```
+
+
+
+## SASS
+
+There are two syntax available `sass` and `scss`
+
+```scss
+// VARIABLE
+$color: reg;																// variable declaration
+nav {
+  background-color: $color;
+}
+
+----------------------------------------------------------------------------------------------------------------
+// NESTING
+.parentClass {
+  background-color: yellow;
+  li {
+    text-decoration:none;
+    &:hover {																// &: pesudo-class
+      background-color: green;
+    }
+  }
+}
+
+---------------------------------------------------------------------------------------------------------------
+// MIXINS
+@mixin myMixin {														// mixin is kinda a function, returns the values written inside it,
+  // some style declarations								// it can take arguments as well.
+}
+.btn-main {
+  @include myMixin;
+}
+
+@mixin mixin-with-arg($arg){
+  color: $arg;
+}
+$myColor: red;
+.btn-main {
+  @include mixin-with-arg($myColor)
+}
+
+---------------------------------------------------------------------------------------------------------------
+// FUNCTIONS
+@function divide($a, $b) {
+  @return $a / $b;
+}
+nav {
+  margin: divide(60, 2) * 1px;									// function returns a number, so convert it into px
+  background-color: darken($myColor, 10%);			// some inbuilt functions
+  color: lighten($myColor, 10%);
+}
+
+---------------------------------------------------------------------------------------------------------------
+// EXTEND
+%btn-placeholder {															// think of it like Class
+  display: inline-block;
+  padding: 15rem;
+  border-radius: 10rem;
+  @include mixin-with-arg($myColor);
+}
+
+.btn-hot {
+  @extend %btn-design;
+  background-color: red;
+}
+.btn-not-so-hot {
+  @extend %btn-design;
+}
+		|'''''|
+		|			|
+----			-----
+\						 /
+  \				 /
+    \    /
+     ---
+.btn-hot, btn-not-so-hot {									// extend doesn't copy the code to all the places, 
+  display: inline-block;										// it takes the selectors and declares a combined selector
+  padding: 15rem;														// and applies the styles.
+  border-radius: 10rem;
+  @include mixin-with-arg($myColor);
+}
+.btn-hot {
+  background-color: red;
+}
+
+----------------------------------------------------------------------------------------------------------------
+$margin: 2rem;
+some-property: calc(2 * #{$margin});			// to use varible in css functions #{var}
+```
+
+> MIXIN : declare a mixin and @include somewhere -> copies the mixin code in @include
+> EXTEND : declare a placeholder and @extend at multiple selectors -> will create combined selector (won’t copy the code in both places)
+
+#### MultiFile sass
+
+* file structure -> `components/_button.scss`
+* import file on another file -> `@import “components/button”`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Grid
 
