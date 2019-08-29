@@ -29,6 +29,7 @@ margin: 10px 20px 30px 40px									// top 10, right 20, bottom 30, left 40 (clo
 height: 50px;
 width: 50px;
 verticle-align: centre											// Align vertically
+shape-outside: circle(radious at center)		// only works when the element is floated
 ```
 
 ## Selector
