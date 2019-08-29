@@ -50,8 +50,29 @@ $a\overrightarrow{u}+b\overrightarrow{v}+c\overrightarrow{w}$ here by changing $
 
 > Technical Definition: The basis of a vector space (2D or 3D) is a set of **linearly independent** vectors that **span** the full space (2D or 3D)
 
+
+
 ## Linear Transformation
 
 > Transformation is basically a function that takes a vector and spits out another vector
 > Linear Transformation : origin must not change and straight line should output straight line not a curve.
+
+Every vector is made by scaling and adding the basis vectors. So in order to transform (keeping the origin constant scaling and changing the direction of the vector) can be done by scaling and changing the direction of basis vectors. 
+
+$\overrightarrow{A}=3\hat{i}+4\hat{j}$
+So the idea is decide where you want basis vectors to land after transformation and replace the new $\hat{i},\hat{j}$ vectors in the above equation.
+
+suppose $\hat{i}$ and $\hat{j}$ are basis vectors and their coordinates are (1,0) and (0, 1), now after transforming these two their new coordinates are (1, 2) and (-3, 4) 
+
+$3\times\begin{bmatrix}1 \\ 2\end{bmatrix}+4\times\begin{bmatrix}-3 \\ 4\end{bmatrix} =>\begin{bmatrix}1&-3\\2&4\end{bmatrix}\times\begin{bmatrix}3 \\ 4\end{bmatrix}=>\begin{bmatrix}1(3)+(-3)(4) \\ 2(3)+4(4)\end{bmatrix}=>\begin{bmatrix}-9 \\ 22\end{bmatrix}=-9\hat{i}+22\hat{j}$ 
+
+
+
+$\hat{i}$ coordinates on 1st column, $\hat{j}$ coordinates on 2nd column
+
+$$F_{Transform}(\overrightarrow{A})=\overrightarrow{B}=\begin{bmatrix}a & c \\b & d \end{bmatrix}\times\begin{bmatrix}A\hat{i} \\ A\hat{j}\end{bmatrix}=\begin{bmatrix}a(A\hat{i})+c(A\hat{j}) \\ b(A\hat{i})+d(A\hat{j})\end{bmatrix}$$ 
+
+**Matrix Multiplication**
+multiplying a matrix with a vector transforms it. So multiplying two matrices to that vector means applying two transformations.
+$\begin{bmatrix}a & c \\b & d \end{bmatrix}\begin{bmatrix}e & g\\f & h \end{bmatrix}\begin{bmatrix}x \\ y\end{bmatrix}=\begin{bmatrix}? & ? \\? & ? \end{bmatrix}\begin{bmatrix}x \\ y\end{bmatrix}$      the resultant matrix represents the final transformation after applying both the transformations on $\begin{bmatrix}x \\ y\end{bmatrix}$
 
