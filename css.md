@@ -491,13 +491,13 @@ nav {
 .btn-not-so-hot {
   @extend %btn-design;
 }
-		|'''''|
-		|			|
-----			-----
-\						 /
-  \				 /
+    |'''''|
+    |     |
+----      -----
+\            /
+  \        /
     \    /
-     ---
+      --
 .btn-hot, btn-not-so-hot {									// extend doesn't copy the code to all the places, 
   display: inline-block;										// it takes the selectors and declares a combined selector
   padding: 15rem;														// and applies the styles.
