@@ -18,18 +18,18 @@ To fix it use `box-sizing: border-box` . It will set the height and width of the
 
 #### Important Properties
 
-```css
-color: red;																	// content color
-background-color: black;										// content background color
-display: block/inline/inline-block/none			// display type
-padding: 10px																// padding
-border: 2px solid/dashed black							// size type color
-margin: 20px 40px														// top/bottom 20px  left right 40px
-margin: 10px 20px 30px 40px									// top 10, right 20, bottom 30, left 40 (clockwise)
+```scss
+color: red;                                 // content color
+background-color: black;                    // content background color
+display: block/inline/inline-block/none     // display type
+padding: 10px                               // padding
+border: 2px solid/dashed black              // size type color
+margin: 20px 40px                           // top/bottom 20px  left right 40px
+margin: 10px 20px 30px 40px                 // top 10, right 20, bottom 30, left 40 (clockwise)
 height: 50px;
 width: 50px;
-verticle-align: centre											// Align vertically
-shape-outside: circle(radious at center)		// only works when the element is floated
+verticle-align: centre                      // Align vertically
+shape-outside: circle(radious at center)    // only works when the element is floated
 ```
 
 ## Selector
@@ -45,11 +45,11 @@ attribute | [disabled] { property: value }
 
 #### Attribute Selector
 
-```css
+```scss
 button[disabled] {
   //if button is disabled
 }
-div[class*="text"] {     											//[name="someName"], [name*="name"] any attribute
+div[class*="text"] {                               // [name="someName"], [name*="name"] any attribute
   // if div class name contains "text"
   // class="first_text"
   // class="text_first"
@@ -66,8 +66,8 @@ div[class*="text"] {     											//[name="someName"], [name*="name"] any attr
 
 #### :not( selector )
 
-```css
-:not(p) { color: orange; }									// apply where element is not p
+```scss
+:not(p) { color: orange; }                         // apply where element is not p
 ```
 
 #### nth-child()
@@ -94,21 +94,21 @@ p:nth-child(even) {
 <style>
   a:active,
   a:hover {
-    color: yellow;						// active and hover pseudo classes will have same style
+    color: yellow;             // active and hover pseudo classes will have same style
   }
   
   .ex1 {
     color: yellow;
     background: black;
   }
-  a.ex1 {										// Override ex1 class in anchor tags.
+  a.ex1 {                     // Override ex1 class in anchor tags.
     color: orange;
   }
 </style>
 
 <body>
-  <a class="ex1" href="#">overwritten</a>					// get ex1 class, but override color
-  <p class="ex1"> class applied </p>							//get ex1 class
+  <a class="ex1" href="#">overwritten</a>         // get ex1 class, but override color
+  <p class="ex1"> class applied </p>              //get ex1 class
 </body>
 
 
@@ -135,7 +135,7 @@ child elements get the styles of parent elements
     color: green;
   }
   #someId {
-    color: inherit;								// Inherit parent style
+    color: inherit;                              // Inherit parent style
   }
 </style>
 
@@ -143,7 +143,7 @@ child elements get the styles of parent elements
   <div>
     <h1>Inherited</h1>
   </div>
-  <p>Overwritten</p>  //because <p> is directly targetted in css
+  <p>Overwritten</p>                            //because <p> is directly targetted in css
   <article><p>Overwritten</p></article>
 </div>
 ```
@@ -175,24 +175,24 @@ sticky | In the document flow<br />position is relative to view-port<br />if we 
 
 ## Background
 
-```css
-background-color: red;																				// set solid/gradient background
-background-image: url("image.jpg");														// set the background image
+```scss
+background-color: red;                                        // set solid/gradient background
+background-image: url("image.jpg");                           // set the background image
 
-background-size: widhth height;																// set width and height in px
-background-size: 100%;																				// takes full width and crops height to adjust
-background-size: cover;																				// crops image in a way it covers properly
-background-size: contain;																			// displays whole image
-background-size: 100px;																				// one value referes to the widht, it'll repeat
+background-size: widhth height;                               // set width and height in px
+background-size: 100%;                                        // takes full width and crops height to adjust
+background-size: cover;                                       // crops image in a way it covers properly
+background-size: contain;                                     // displays whole image
+background-size: 100px;                                       // one value referes to the widht, it'll repeat
 
-background-repeat: no-repeat / repeat-x / repeat-y						// set repeat
+background-repeat: no-repeat / repeat-x / repeat-y            // set repeat
 
-background-position: 10px 20px;																// 10px from left and 20px from top of the container
-background-position: 10% 20%;																	// it only works if the image has remaining area
-background-position: center;																	// same as 50% 50%
-background-position: left top;																// same as 0% 0%
+background-position: 10px 20px;                               // 10px from left and 20px from top of the container
+background-position: 10% 20%;                                 // it only works if the image has remaining area
+background-position: center;                                  // same as 50% 50%
+background-position: left top;                                // same as 0% 0%
 
-background-origin: border-box / content-box / padding-box			// similar to 'box-sizing
+background-origin: border-box / content-box / padding-box     // similar to 'box-sizing
 ```
 
 `background-position: 10% 20%`
@@ -263,14 +263,14 @@ Hardware pixels vs Software pixels [mydevice.io](MyDevice.io)
                                user-scalable=yes" >
 ```
 
-```css
+```scss
 @media(condition){
   selector {
     rules;
   }
 }
 
-@media(min-width: 40rem) and/or (min-height: 30rem)					// logical operators
+@media(min-width: 40rem) and/or (min-height: 30rem)            // logical operators
 (orientation: langscape)
 ```
 
@@ -278,34 +278,34 @@ Hardware pixels vs Software pixels [mydevice.io](MyDevice.io)
 
 ```css
 .flex-container {
-  display: flex														/* flexBox ->  applies default flex-direction: row, wrap: nowrap */
-    			 inline-flex;										/* doesn't take full width, just like inline-block               */
-  flex-direction: row											/* put the elements on row                                       */
-    							row-reverse							/* put the elements on row in reverse order                      */
-    							column									/* put the elements on column                                    */
-    							column-reverse;					/* put the elements on column in reverse order                   */
-  flex-wrap: nowrap												/* default -> display everything on row or column                */
-    				 wrap													/* wrap if necessary -> shifts the elements down on row          */
-    				 wrap-reverse;								/* wrap if necessary -> shifts the elements up on row            */
-  flex-flow: row wrap;										/* Shorthand for direction and wrap                              */
-  justify-content: flex-start							/* stick everything to the left           (main axis)            */
-    							 flex-end								/* stick everything to the right					(main axis) 					 */
-    							 center									/* place everything at center             (main axis)            */
-    							 space-around						/* Distrubute empty space evenly around the elements (main axis) */
-    							 space-between;					/* Distribute empty space between the elements  (main axis)      */
-  align-items: center											/* Vertically align at the center         (cross axis)           */
-    					 flex-start									/* Align at the top                       (cross axis)           */
-    					 flex-end										/* Align at the bottom                    (cross axis)           */
-    					 stretch										/* Stretch the height                     (cross axis)           */
-    				   baseline;									/* align on basis of content base line    (cross axis)           */
+  display: flex                           /* flexBox ->  applies default flex-direction: row, wrap: nowrap */
+           inline-flex;                   /* doesn't take full width, just like inline-block               */
+  flex-direction: row                     /* put the elements on row                                       */
+                  row-reverse             /* put the elements on row in reverse order                      */
+                  column                  /* put the elements on column                                    */
+                  column-reverse;         /* put the elements on column in reverse order                   */
+  flex-wrap: nowrap                       /* default -> display everything on row or column                */
+             wrap                         /* wrap if necessary -> shifts the elements down on row          */
+             wrap-reverse;                /* wrap if necessary -> shifts the elements up on row            */
+  flex-flow: row wrap;                    /* Shorthand for direction and wrap                              */
+  justify-content: flex-start             /* stick everything to the left           (main axis)            */
+                   flex-end               /* stick everything to the right          (main axis)            */
+                   center                 /* place everything at center             (main axis)            */
+                   space-around           /* Distrubute empty space evenly around the elements (main axis) */
+                   space-between;         /* Distribute empty space between the elements  (main axis)      */
+  align-items: center                     /* Vertically align at the center         (cross axis)           */
+               flex-start                 /* Align at the top                       (cross axis)           */
+               flex-end                   /* Align at the bottom                    (cross axis)           */
+               stretch                    /* Stretch the height                     (cross axis)           */
+               baseline;                  /* align on basis of content base line    (cross axis)           */
 }
 
 .flex-items {
-  order: 1/2/3...;												/* at what position should item be displayed                     */
-  align-self: flex-start;									/* align single element   (cross axis)                           */
-  flex-grow: 1/2/3....;										/* empty space is divided by shares and added to the elements    */
-  flex-shrink: 1/2/3...;									/* allow element to shrink beyond it's size. by what share -> no */
-  flex-basis: 100px / 10%;								/* initial length of item along main axis (%of container)        */
+  order: 1/2/3...;                        /* at what position should item be displayed                     */
+  align-self: flex-start;                 /* align single element   (cross axis)                           */
+  flex-grow: 1/2/3....;                   /* empty space is divided by shares and added to the elements    */
+  flex-shrink: 1/2/3...;                  /* allow element to shrink beyond it's size. by what share -> no */
+  flex-basis: 100px / 10%;                /* initial length of item along main axis (%of container)        */
 }
 ```
 
@@ -341,7 +341,7 @@ font-family: sans-serif
 font-weight: 400;
 font-size: 16px;
 line-height: 1.4;
-letter-spacing: 10px;                       /* spacing between letters                                        */
+letter-spacing: 10px;                                /* spacing between letters                                 */
 ```
 
 ## Animations
@@ -378,23 +378,23 @@ transition: prints the screen slowly, so it looks like printed
 ## pseudo class | pseudo element
 
 ```css
-.btn:link,													/* use , to defin styling for multipl selector                             */	
-.btn:visited {											/* :pseudo-class -> hover, etc                                             */
+.btn:link,                          /* use , to defin styling for multipl selector                             */	
+.btn:visited {                      /* :pseudo-class -> hover, etc                                             */
   text-transform: uppercase;
   text-decoration: none;
   color: white;
   display: inline-block;
   border-radius: 100px;
-  transition: all .2s;						/* ANIMATION                                                                 */
+  transition: all .2s;             /* ANIMATION                                                                */
 }
 
 .btn:hover {
-  transform: translateY(-3px);	/* when hovered -> goes up by 3px                                              */
+  transform: translateY(-3px);     /* when hovered -> goes up by 3px                                           */
   box-shadow: 0 10px 20px rgba(0,0,0, .2);
 }
 
 .btn:active {
-  transform: translateY(-1px); /* when clicked -> goes up by 1px                                               */
+  transform: translateY(-1px);     /* when clicked -> goes up by 1px                                          */
   box-shadow: 0 5px 10px rgba(0,0,0, .2s);
 }
 
@@ -403,17 +403,17 @@ transition: prints the screen slowly, so it looks like printed
 * Here pseudo element is a semi transparent btn that's behind the main button and comes out and fades away when we hover. It comes back goes behind the main button when we move away from the button
 */
 
-.btn::after {								/* ::pseudo-element -> same config as the main element                             */
-  content: ""; 							/* necesary -> if skipped, element won't be there                                  */
+.btn::after {                      /* ::pseudo-element -> same config as the main element                      */
+  content: "";                     /* necesary -> if skipped, element won't be there                           */
   display: inline-block;
   height: 100%;
   width: 100%;
   border-radius: 100ps;
-  position: absolute; 		/* reference should be main button .btn { position: relative; }                      */
+  position: absolute;              /* reference should be main button .btn { position: relative; }            */
   top: 0;
   left: 0;
   background-color: white;
-  transition: all .2s;    /* animate the pseudo element                                                       */
+  transition: all .2s;             /* animate the pseudo element                                              */
 }
 
 .btn:hover::after {
@@ -430,7 +430,7 @@ There are two syntax available `sass` and `scss`
 
 ```scss
 // VARIABLE
-$color: reg;																// variable declaration
+$color: reg;                               // variable declaration
 nav {
   background-color: $color;
 }
@@ -441,7 +441,7 @@ nav {
   background-color: yellow;
   li {
     text-decoration:none;
-    &:hover {																// &: pesudo-class
+    &:hover {                             // &: pesudo-class
       background-color: green;
     }
   }
@@ -449,8 +449,8 @@ nav {
 
 ---------------------------------------------------------------------------------------------------------------
 // MIXINS
-@mixin myMixin {														// mixin is kinda a function, returns the values written inside it,
-  // some style declarations								// it can take arguments as well.
+@mixin myMixin {                          // mixin is kinda a function, returns the values written inside it,
+  // some style declarations              // it can take arguments as well.
 }
 .btn-main {
   @include myMixin;
@@ -470,14 +470,14 @@ $myColor: red;
   @return $a / $b;
 }
 nav {
-  margin: divide(60, 2) * 1px;									// function returns a number, so convert it into px
-  background-color: darken($myColor, 10%);			// some inbuilt functions
+  margin: divide(60, 2) * 1px;                  // function returns a number, so convert it into px
+  background-color: darken($myColor, 10%);      // some inbuilt functions
   color: lighten($myColor, 10%);
 }
 
 ---------------------------------------------------------------------------------------------------------------
 // EXTEND
-%btn-placeholder {															// think of it like Class
+%btn-placeholder {                              // think of it like Class
   display: inline-block;
   padding: 15rem;
   border-radius: 10rem;
@@ -498,9 +498,9 @@ nav {
   \        /
     \    /
       --
-.btn-hot, btn-not-so-hot {									// extend doesn't copy the code to all the places, 
-  display: inline-block;										// it takes the selectors and declares a combined selector
-  padding: 15rem;														// and applies the styles.
+.btn-hot, btn-not-so-hot {                  // extend doesn't copy the code to all the places, 
+  display: inline-block;                    // it takes the selectors and declares a combined selector
+  padding: 15rem;                           // and applies the styles.
   border-radius: 10rem;
   @include mixin-with-arg($myColor);
 }
@@ -510,7 +510,7 @@ nav {
 
 ----------------------------------------------------------------------------------------------------------------
 $margin: 2rem;
-some-property: calc(2 * #{$margin});			// to use varible in css functions #{var}
+some-property: calc(2 * #{$margin});       // to use varible in css functions #{var}
 ```
 
 > MIXIN : declare a mixin and @include somewhere -> copies the mixin code in @include
@@ -539,16 +539,16 @@ now write everything in rem units, so for media queries just change the font siz
 ```scss
 @mixin respond($device) {
   @if ($device == phone) {
-    @media(max-width: 37.5em) { @content };			// 600px
+    @media(max-width: 37.5em) { @content };      // 600px
   }
   @if ($device == tab-port) {
-    @media(max-width: 56.25em) { @content };		// 900px
+    @media(max-width: 56.25em) { @content };     // 900px
   }
   @if ($device == tab-land) {
-    @media(max-width: 75em) { @content };				// 1200px
+    @media(max-width: 75em) { @content };        // 1200px
   }
   @if ($device == big-desktop) {
-    @media(min-width: 112.5em) { @content };		// 1800px
+    @media(min-width: 112.5em) { @content };     // 1800px
   }
 }
 
@@ -615,11 +615,11 @@ src: if the browser doesn’t support srcset, sizes
 ```css
 .grid-container {
   display: grid;
-  grid-template-columns: 100px 2fr 20% 3fr;	/* defined 4 columns 100px, 2/5(100%-20% - 100px) and so on      */
+  grid-template-columns: 100px 2fr 20% 3fr;    /* defined 4 columns 100px, 2/5(100%-20% - 100px) and so on      */
   grid-template-rows: 
 }
 
-.grid-element {								              /* define how many blocks element will take                      */
+.grid-element {                                /* define how many blocks element will take                      */
   grid-column-start: 3;
   grid-column-end: 5;
   grid-row-start: line-no;
