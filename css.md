@@ -523,11 +523,84 @@ some-property: calc(2 * #{$margin});			// to use varible in css functions #{var}
 
 
 
+## Responsive Design
+
+**Media Queries**
+0             -    600px       phone
+600px     -    900px       tab-port
+900px     -    1200px      tab-land
+[1200px-1800px]     default design
+1800px+             big-desktop
+
+1rem = 1em = 16px (default)
+html font-size = 62.5%		1rem = 10px, 10/16=62.5%
+now write everything in rem units, so for media queries just change the font size, it’ll affect the whole page.
+
+```scss
+@mixin respond($device) {
+  @if ($device == phone) {
+    @media(max-width: 37.5em) { @content };			// 600px
+  }
+  @if ($device == tab-port) {
+    @media(max-width: 56.25em) { @content };		// 900px
+  }
+  @if ($device == tab-land) {
+    @media(max-width: 75em) { @content };				// 1200px
+  }
+  @if ($device == big-desktop) {
+    @media(min-width: 112.5em) { @content };		// 1800px
+  }
+}
 
 
+.selector {
+  property: value;
+  @include respond(phone){
+    property: modified_value;
+  }
+}
+```
 
+**Responsive Images**
+HTML images
+-- density switching `<img srcset=“img_1x.png 1x, img_2x.png 2x”/>` here first image will be used for lower resolution screen and 2nd image for higher resolution screen
 
+-- Art direction
+. different image for different screen size.
+. Here if the screen width <= 37.5em, the source image will be applied. where there are two images, which will be decided based on the screen resolution.
+. if the media query is unmet, the default <img> will be applied
 
+```html
+<picture class="img_class">
+  <source srcset="img_sml_1x.png 1x, img_sml_2x.png 2x" media="(max-width: 37.5em)"/>
+  <img srcset="img_1x.png 1x, img_2x.png 2x" />
+</picture>
+```
+
+-- Resolution Switching
+. different image for different resolution screen.
+. pre-define width of the image in `srcset` => browser know which one to download
+
+```html
+<img srcset="img.jpg 300w, img-large.jpg 1000w"
+     sizes="(max-width: 900px) 20vw, (max-widht: 600px) 30vw, 300px"
+     class="img_class"
+     src="img.jpg">
+```
+
+srcset: img.jpg -> 300px wide, img-large.jpg -> 1000px wide
+sizes: at 900px img takes 20% of view width, 300px at default size (fallback)
+src: if the browser doesn’t support srcset, sizes
+
+```scss
+.selector {
+  background-image: url("img-small.jpg");
+  
+  @media(min-resolution: 192dpi) and (min-width: 600px) {					// macbook pro ratina display dpi
+    background-image: url("img-large.jpg");
+  }
+}
+```
 
 
 
