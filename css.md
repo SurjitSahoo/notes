@@ -274,7 +274,7 @@ Hardware pixels vs Software pixels [mydevice.io](MyDevice.io)
 (orientation: langscape)
 ```
 
-## FlexBox
+## <u>FlexBox</u>
 
 ```css
 .flex-container {
@@ -319,13 +319,7 @@ Hardware pixels vs Software pixels [mydevice.io](MyDevice.io)
 
 
 
-
-
-
-
-==#####################################################################################################################==
-==##############################################== Advanced CSS ==##########################################################==
-==#####################################################################################################################==
+# <u>ADVANCED CSS AND SASS</u>
 
 
 
@@ -596,7 +590,7 @@ src: if the browser doesn’t support srcset, sizes
 .selector {
   background-image: url("img-small.jpg");
   
-  @media(min-resolution: 192dpi) and (min-width: 600px) {					// macbook pro ratina display dpi
+  @media(min-resolution: 192dpi) and (min-width: 600px) {        // macbook pro ratina display dpi
     background-image: url("img-large.jpg");
   }
 }
