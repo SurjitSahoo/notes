@@ -67,7 +67,7 @@ $a\overrightarrow{u}+b\overrightarrow{v}+c\overrightarrow{w}$ here by changing $
 > Linear Transformation : origin must not change and straight line should output straight line not a curve.
 
 -- As we know every vector is composed by scaling and adding the basis vectors.  
--- So in order to transform (keeping the origin constant) just scale(-ve or +ve) and changing the   direction(angle) of basis vectors.  
+-- So in order to transform (keeping the origin constant) just scale(-ve or +ve) and change the   direction(angle) of basis vectors.  
 -- By doing that we get entire new basis vectors.
 
 $\overrightarrow{A}=3\hat{i}+4\hat{j}$ &nbsp;&nbsp; is a vector of specific length pointing in a direction, we've to transform it.  
@@ -90,3 +90,56 @@ $\begin{bmatrix}a & c \\b & d \end{bmatrix}\begin{bmatrix}e & g\\f & h \end{bmat
 
 The resultant matrix represents the final transformation after applying both the transformations on $\begin{bmatrix}x \\ y\end{bmatrix}$
 
+Similarly if you take 3 basis vectors in a 3D space $\hat{i}$, $\hat{j}$ and $\hat{k}$, you'll have 3x3 matrix to transform a vector in this 3d space where each column represents coordinates of $\hat{i}$, $\hat{j}$ and $\hat{k}$
+
+$\begin{bmatrix}a & b & c \\d & e & f \\g & h & i \end{bmatrix}\begin{bmatrix}x \\ y \\ z\end{bmatrix}=x\begin{bmatrix}a \\ d \\g \end{bmatrix} + y \begin{bmatrix}b \\ e \\ h\end{bmatrix} + z\begin{bmatrix}e \\ f \\ i\end{bmatrix}=\begin{bmatrix}ax+by+cz \\ dx+ey+fz \\ gx+hy+iz\end{bmatrix}$   
+
+# Determinant
+
+-- We know that a matrix basically means transformation.  
+-- Determinant of a matrix tells us by what factor a particular area will be squished down or scaled up if we apply that transformation.  
+
+* +ve whole det -> area will be scaled up
+* fraction det -> area will be scaled down
+* -ve det -> orientation will be flipped. e.g. if originally $\hat{j}$ was at the left of $\hat{i}$, after transformation $\hat{j}$ will be at the right side of $\hat{i}$.
+* 0 -> area becomes zero, which means $\hat{i}$ and $\hat{j}$ land on top of each other.
+
+-- Determinant of 3x3 matrix will tell us by what factor a particular volume will be squished or scaled if we apply that transformation.
+
+D $\begin{bmatrix}a & b & c \\d & e & f \\g & h & i \end{bmatrix}$
+
+$=a\begin{bmatrix}e & f\\h & i\end{bmatrix}-b\begin{bmatrix}d & f\\g & i\end{bmatrix}+c\begin{bmatrix}d & e\\g & h\end{bmatrix}$
+$-d\begin{bmatrix}b & c\\h & i\end{bmatrix}+e\begin{bmatrix}a & c\\g & i\end{bmatrix}-f\begin{bmatrix}a & b\\g & h\end{bmatrix}$
+$+g\begin{bmatrix}b & c\\e & f\end{bmatrix}-h\begin{bmatrix}a & c\\d & f\end{bmatrix}+i\begin{bmatrix}a & b\\d & e\end{bmatrix}$
+
+# Inverse Matrix
+
+You might have used matrices to solve linear system of equations. e.g.  
+$2x+3y-4z=5$  
+$3x+0y+4z=-3$  
+$0x-6y+2z=9$  
+
+to solve for x, y and z you'd probably write these as  
+
+$\begin{bmatrix}2 & 3 & -4 \\3 & 0 & 4 \\0 & -6 & 2 \end{bmatrix}\begin{bmatrix}x\\y\\z\end{bmatrix}=\begin{bmatrix}5\\-3\\9\end{bmatrix}$
+
+Think about it for a moment, you want to find out $\begin{bmatrix}x\\y\\z\end{bmatrix}$ vector, which after transformation becomes $\begin{bmatrix}5\\-3\\9\end{bmatrix}$. So if you just apply the transformation in reverse on $\begin{bmatrix}5\\-3\\9\end{bmatrix}$, you'll get the original vector.
+
+$$\begin{bmatrix}x\\y\\z\end{bmatrix}=\begin{bmatrix}5\\-3\\9\end{bmatrix}\begin{bmatrix}2 & 3 & -4 \\3 & 0 & 4 \\0 & -6 & 2 \end{bmatrix}^{-1}$$
+
+> NOTE: If determinant of a matrix is zero, this transformation squishes the area to a single line(area=0, for 3D volume=0), That's why applying the reverse transformation is not possible. There's no way to un-squish the line.  
+> -After transformation the vector will most probably end up at zero(length=0), there's no un-squishing the vector.  
+> -However, it's still possible to find a solution even if the determinant is zero, the vector must land on top of $\hat{i}$ and $\hat{j}$.  
+> -In 2D transformation the probability to find solution is more as compared to 3D, because, 2D plane will be squished to a line, but in 3D entire 3D space will be squished to a single line.
+
+# Identity Matrix
+
+If matrix $A$ represents a transformation $A^{-1}$ will represent reverse of that transformation, so $A\times A^{-1}=I$, where $I$ is the identity matrix.
+
+-- identity matrix does no change to the vector on transformation.
+
+# Rank of Matrix
+
+Rank : Dimension of the output after transformation.  
+If transformation squishes the area to a line : Rank = 1 (1 dimensional)  
+If transformation squishes the area to a plane, Rank = 2 (2 dimensional)  
