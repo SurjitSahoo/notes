@@ -35,19 +35,23 @@ $\begin{bmatrix}a \\ b \\ c\end{bmatrix}$ = $a\hat{i}+b\hat{j}+c\hat{k}$
 ## Basis Vector
 
 Every vector is composed by scaling and adding unit vectors. E.g. following two dimensional vector  
-$\overrightarrow{A}=\begin{bmatrix}3 \\ -2\end{bmatrix}=>(3\times\hat{i})+(-2
-\times\hat{j})$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $\hat{i}$ and $\hat{j}$ are scaled and added to form $\overrightarrow{A}$
+
+$\overrightarrow{A}=3\hat{i}-2\hat{j}=\begin{bmatrix}3 \\ -2\end{bmatrix}$  
+
+-- Assuming $\hat{i}$ and $\hat{j}$ are 1 unit along x-axis and y axis respectively, if you walk 3 units along +ve x axis then 2 units along -ve y-axis, it's same as walking from (0,0) to (3, -2)  
+-- $\hat{i}$ and $\hat{j}$ are scaled and added to form $\overrightarrow{A}$
 
 here $\hat{i}$ and $\hat{j}$ are the basis vectors (unit vectors)
 
 **span of basis vectors**   
-Area of space you can cover by scaling and adding vectors is the span of those vectors
+If you create every possible vector by scaling and adding the unit vectors how much space you can cover ?  
+This area is the span of those vectors
 
 2D:  
 In 2D there are two basis vectors $\hat{i}$ and $\hat{j}$ by scaling and adding these two vectors if you create every possible vector, you’ll be able to cover entire 2D plane.  
 So span of two vectors is a plane.  
 -- If both vectors lie on top of each other, scaling and adding them will create vector which will also lie on top of them, so span will become a line (both vectors are linearly dependent)  
--- if both the vectors are zero, then you’re stuck at origin.
+-- if both the vectors are zero, then you’re stuck at origin. Span is zero.
 
 $a\overrightarrow{v}+b\overrightarrow{w}$ here by changing $a$ & $b$ (scalers) you can reach every point on a plane. this is called **Linear combination** of $\overrightarrow{v}$ and $\overrightarrow{w}$
 
@@ -70,8 +74,11 @@ $a\overrightarrow{u}+b\overrightarrow{v}+c\overrightarrow{w}$ here by changing $
 -- So in order to transform (keeping the origin constant) just scale(-ve or +ve) and change the   direction(angle) of basis vectors.  
 -- By doing that we get entire new basis vectors.
 
-$\overrightarrow{A}=3\hat{i}+4\hat{j}$ &nbsp;&nbsp; is a vector of specific length pointing in a direction, we've to transform it.  
-So the idea is to decide where you want the basis vectors to land after transformation and replace the new $\hat{i},\hat{j}$ in the above equation.
+$\overrightarrow{A}=3\hat{i}+4\hat{j}$
+
+$\overrightarrow{A}$ is a vector of specific length pointing in a direction, It basically means walk 3 units along +ve x-axis then walk 4 units along +ve y-axis.  
+What if we change the length and direction of $\hat{i}$ and $\hat{j}$ ? The resulting vector will also change. This is what we call transformation.  
+If we want to transform $\overrightarrow{A}$, the idea is to decide where you want the basis vectors to land after transformation and replace the new $\hat{i}$ and $\hat{j}$ in the above equation.
 
 suppose originally $\hat{i}$ and $\hat{j}$ (basis vectors) were at (1,0) and (0, 1) respectively, now after transformation new coordinated of these two are (1, 2) and (-3, 4)  
 now replacing the new value of basis vectors in the above equation, we get
@@ -97,12 +104,12 @@ $\begin{bmatrix}a & b & c \\d & e & f \\g & h & i \end{bmatrix}\begin{bmatrix}x 
 # Determinant
 
 -- We know that a matrix basically means transformation.  
--- Determinant of a matrix tells us by what factor a particular area will be squished down or scaled up if we apply that transformation.  
+-- Determinant of a matrix tells us by what factor a particular area within basis vectors will be squished down or scaled up if we apply that transformation.  
 
 * +ve whole det -> area will be scaled up
 * fraction det -> area will be scaled down
 * -ve det -> orientation will be flipped. e.g. if originally $\hat{j}$ was at the left of $\hat{i}$, after transformation $\hat{j}$ will be at the right side of $\hat{i}$.
-* 0 -> area becomes zero, which means $\hat{i}$ and $\hat{j}$ land on top of each other.
+* 0 -> area becomes zero, $\hat{i}$ and $\hat{j}$ land on top of each other.
 
 -- Determinant of 3x3 matrix will tell us by what factor a particular volume will be squished or scaled if we apply that transformation.
 
@@ -122,15 +129,23 @@ $0x-6y+2z=9$
 to solve for x, y and z you'd probably write these as  
 
 $\begin{bmatrix}2 & 3 & -4 \\3 & 0 & 4 \\0 & -6 & 2 \end{bmatrix}\begin{bmatrix}x\\y\\z\end{bmatrix}=\begin{bmatrix}5\\-3\\9\end{bmatrix}$
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$T\times \overrightarrow{X}=\overrightarrow{A}$
 
-Think about it for a moment, you want to find out $\begin{bmatrix}x\\y\\z\end{bmatrix}$ vector, which after transformation becomes $\begin{bmatrix}5\\-3\\9\end{bmatrix}$. So if you just apply the transformation in reverse on $\begin{bmatrix}5\\-3\\9\end{bmatrix}$, you'll get the original vector.
+Think about it for a moment, you want to find out $\overrightarrow{X}$, which after transformation $T$, becomes $\overrightarrow{A}$.   
 
-$$\begin{bmatrix}x\\y\\z\end{bmatrix}=\begin{bmatrix}5\\-3\\9\end{bmatrix}\begin{bmatrix}2 & 3 & -4 \\3 & 0 & 4 \\0 & -6 & 2 \end{bmatrix}^{-1}$$
+As long as this transformation $T$ doesn't squish all the space to a lower dimension (determinant $\neq0$) there will be a unique vector $\overrightarrow{X}$ which on transformation becomes $\overrightarrow{A}$  
+So if you just apply the transformation $T$ in reverse on $\overrightarrow{A}$, you'll get the original vector $\overrightarrow{X}$.
 
-> NOTE: If determinant of a matrix is zero, this transformation squishes the area to a single line(area=0, for 3D volume=0), That's why applying the reverse transformation is not possible. There's no way to un-squish the line.  
-> -After transformation the vector will most probably end up at zero(length=0), there's no un-squishing the vector.  
-> -However, it's still possible to find a solution even if the determinant is zero, the vector must land on top of $\hat{i}$ and $\hat{j}$.  
-> -In 2D transformation the probability to find solution is more as compared to 3D, because, 2D plane will be squished to a line, but in 3D entire 3D space will be squished to a single line.
+$$\overrightarrow{X}=\overrightarrow{A}\times \overrightarrow{T}^{-1} => \begin{bmatrix}x\\y\\z\end{bmatrix}=\begin{bmatrix}5\\-3\\9\end{bmatrix}\begin{bmatrix}2 & 3 & -4 \\3 & 0 & 4 \\0 & -6 & 2 \end{bmatrix}^{-1}$$
+
+
+> NOTE: If determinant of a matrix is zero, this transformation squishes the area to a single line or point, or volume to a plane or line or point, That's why applying the reverse transformation is not possible. There's no way to un-squish the line.  
+> --Un-squishing a line into a plane will require one function to take that line as input and spit out a lot of lines that will make up the plane, but a function returns only one value. That's why inverse of that matrix doesn't exist.  
+> -Because the transformation squishes the vector space to a lower dimension, may be the vector you're looking for doesn't exist  
+> -However, it's still possible to find a solution even if the determinant is zero, the vector must live on lower dimension after the transformation  
+> -In 2D, if the transformation squishes the vector space to a line, the vector must exist on that line after transformation. In 3D, if the transformation squishes the space to a plane or line, the vector must live on that plane or line after the transformation, then only solution is possible.  
+
 
 # Identity Matrix
 
@@ -141,5 +156,17 @@ If matrix $A$ represents a transformation $A^{-1}$ will represent reverse of tha
 # Rank of Matrix
 
 Rank : Dimension of the output after transformation.  
-If transformation squishes the area to a line : Rank = 1 (1 dimensional)  
-If transformation squishes the area to a plane, Rank = 2 (2 dimensional)  
+If transformation squishes the vector space to a line : Rank = 1 (1 dimensional)  
+If transformation squishes the vector space to a plane, Rank = 2 (2 dimensional)  
+
+__Column Space__ : if you take each column of a matrix as basis vector, the span of these vectors is called column space.  
+__Null Space__ : Set of all vectors that land on zero(null) after the transformation.  
+
+# Non-square Matrix
+
+So far we're transforming vectors from 2D space to 2D space and 3D space to 3D space. What if I want to transform a vector from 3D space to 2D space or from 2D space to 3D space.  
+
+$\begin{bmatrix}5 & 1\\-3 & 2\\9 & 4\end{bmatrix}$ 2 columns (2 basis vectors) and 3 rows
+
+In the above 3x2 matrix each basis vector has 3 coordinates, which means they lands on a 3D space.  
+There are 2 basis vectors means it takes a 2D vector as input.
