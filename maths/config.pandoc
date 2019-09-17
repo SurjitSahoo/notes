@@ -1,5 +1,6 @@
 % mystylefile.pandoc
 \usepackage{tcolorbox}
+\usepackage{tikz}
 \newtcolorbox{myquote}{colback=green!5!white, colframe=green!75!black}
 % redefine the 'quote' environment to use this 'myquote' environment
 \renewenvironment{quote}{\begin{myquote}}{\end{myquote}}
