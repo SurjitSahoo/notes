@@ -402,8 +402,6 @@ Well, lets explore that..
 \draw (358.19,142) node [scale=1.2,color={rgb, 255:red, 248; green, 201; blue, 28 }  ,opacity=1 ] [align=left] {$u_{x}$};
 % Text Node
 \draw (468.5,62.5) node [color={rgb, 255:red, 146; green, 146; blue, 146 }  ,opacity=1 ] [align=left] {N};
-
-
 \end{tikzpicture}
 \begin{center}
 
@@ -437,3 +435,76 @@ hmmm... so it means, in order to project $i$ on $u$, $i\times\begin{bmatrix}u_x&
 > This is called **duallity**. (one thing signifies two things)
 
 # Cross Product
+
+We learn on school...  
+In 2D, cross product gives the area of the parallelepiped created by the vectors.  
+$\overrightarrow{A}=2\hat{i}+3\hat{j}$, &nbsp; &nbsp; &nbsp; $\overrightarrow{B}=-2\hat{i}+2\hat{j}$  
+$\overrightarrow{A}\times\overrightarrow{B}=det\left(\begin{bmatrix}2&-2\\3&2\end{bmatrix}\right)=4+6=10$ units  
+But if you flip the order, $\overrightarrow{B}\times\overrightarrow{A}=det\left(\begin{bmatrix}-2&2\\2&3\end{bmatrix}\right)=-6-4=-10$ units. Area is same, but orientation is flipped.
+
+\tikzset{every picture/.style={line width=0.75pt}} 
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,751); %set diagram left start at 0, and has height of 751
+
+%Shape: Axis 2D [id:dp396484071077005] 
+\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=0.14 ] (360,259.76) -- (480,259.76)(419.9,160) -- (419.9,280) (473,254.76) -- (480,259.76) -- (473,264.76) (414.9,167) -- (419.9,160) -- (424.9,167) (439.9,254.76) -- (439.9,264.76)(459.9,254.76) -- (459.9,264.76)(399.9,254.76) -- (399.9,264.76)(379.9,254.76) -- (379.9,264.76)(414.9,239.76) -- (424.9,239.76)(414.9,219.76) -- (424.9,219.76)(414.9,199.76) -- (424.9,199.76)(414.9,179.76) -- (424.9,179.76) ;
+\draw   ;
+%Straight Lines [id:da5789571958688016] 
+\draw [color={rgb, 255:red, 89; green, 255; blue, 3 }  ,draw opacity=1 ]   (420,260) -- (458.89,201.66) ;
+\draw [shift={(460,200)}, rotate = 483.69] [fill={rgb, 255:red, 89; green, 255; blue, 3 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da43298686902097105] 
+\draw [color={rgb, 255:red, 248; green, 231; blue, 28 }  ,draw opacity=1 ]   (420,260) -- (381.41,221.41) ;
+\draw [shift={(380,220)}, rotate = 405] [fill={rgb, 255:red, 248; green, 231; blue, 28 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da5179585251065182] 
+\draw [color={rgb, 255:red, 89; green, 255; blue, 3 }  ,draw opacity=1 ]   (380,220) -- (418.89,161.66) ;
+\draw [shift={(420,160)}, rotate = 483.69] [fill={rgb, 255:red, 89; green, 255; blue, 3 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da26754266726665876] 
+\draw [color={rgb, 255:red, 248; green, 231; blue, 28 }  ,draw opacity=1 ][fill={rgb, 255:red, 228; green, 210; blue, 210 }  ,fill opacity=1 ]   (460,200) -- (421.41,161.41) ;
+\draw [shift={(420,160)}, rotate = 405] [fill={rgb, 255:red, 248; green, 231; blue, 28 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+% Text Node
+\draw (446.1,233.9) node [scale=0.5,color={rgb, 255:red, 89; green, 255; blue, 3 }  ,opacity=1 ] [align=left] {A};
+% Text Node
+\draw (399,246.4) node [scale=0.5,color={rgb, 255:red, 248; green, 231; blue, 28 }  ,opacity=1 ] [align=left] {B};
+\end{tikzpicture}
+
+More the vectors are close to perpendicular with each other, area will be greater.
+
+But why are we taking determinant ?  
+Determinant tell us how an area changes after transformation. So assume, $\hat{i}$ became $\overrightarrow{A}$ and $\hat{j}$ became $\overrightarrow{B}$ after transformation. Initially area enclosed by $\hat{i}$ and $\hat{j}$ was 1 unit, after transformation it became $1\times det(T)=10$ units. If you consider other way around, such as $\hat{i}$ became $\overrightarrow{B}$ and $\hat{j}$ became $\overrightarrow{A}$ after transformation, the result will be negative, because input is same but output is flipped.   
+
+Wait, but we've learnt in school that cross product gives another vector which is perpendicular to the span of input vectors. Yes, but that's for 3D.
+
+let $\overrightarrow{A}=a_1\hat{i}+a_2\hat{j}+a_3\hat{k}$ &nbsp; &nbsp; &nbsp; and &nbsp; &nbsp; &nbsp; $\overrightarrow{B}=b_1\hat{i}+b_2\hat{j}+b_3\hat{k}$  
+
+$\overrightarrow{A}\times\overrightarrow{B}=\begin{bmatrix}\hat{i}&a_1&b_1\\\hat{j}&a_2&b_2\\\hat{k}&a_3&b_3\end{bmatrix}=\hat{i}(a_2b_3-b_2a_3)+\hat{j}(b_1a_3-a_1b_3)+\hat{k}(a_1b_2-b_1a_2)$  
+The result vector's length is same as the area of parallelepiped enclosed by $\overrightarrow{A}$ and $\overrightarrow{B}$ and is perpendicular to the parallelepiped. But in what direction ? There are 2 possible direction right!
+
+There comes the right hand thumb rule. If $\overrightarrow{A}$ is in the direction of forefinger and $\overrightarrow{B}$ is in the direction of middle finger, the cross product will be in the direction of thumb.  
+
+But wait a min, this formula looks a bit fishy. Where did this $\hat{i}$, $\hat{j}$ and $\hat{k}$ in the first column of the matrix come from ? what is it doing there ? We just pretend like there're number for the sake of computation and compute the determinant of the matrix. But why?
+
+Ok, now concentrate...  
+let $\overrightarrow{X}=x\hat{i}+y\hat{j}+z\hat{k}$  
+&nbsp; &nbsp; $\overrightarrow{A}=a_1\hat{i}+a_2\hat{j}+a_3\hat{k}$,  
+&nbsp; &nbsp; $\overrightarrow{B}=b_1\hat{i}+b_2\hat{j}+b_3\hat{k}$  
+
+$\overrightarrow{X}\times\overrightarrow{A}\times\overrightarrow{B}=det\left(\begin{bmatrix}x&a_1&b_1\\y&a_2&b_2\\z&a_3&b_3\end{bmatrix}\right)=Const$ (Volume of the space enclosed by the vectors)
+
+here $\overrightarrow{A}$ and $\overrightarrow{B}$ are fixed, but $\overrightarrow{X}$ is variable.
+
+$fn\left(\begin{bmatrix}x\\y\\z\end{bmatrix}\right)=det\left(\begin{bmatrix}x&a_1&b_1\\y&a_2&b_2\\z&a_3&b_3\end{bmatrix}\right)=Const$
+
+We just defined a function that takes a 3D vector and spits out a number (3D -> 1D transformation)  
+If $T=\begin{bmatrix}v_1&v_2&v_3\end{bmatrix}$ transforms $\begin{bmatrix}x\\y\\z\end{bmatrix}$ to 1D number, there must exist a unique vector $\overrightarrow{V}=\begin{bmatrix}v_1\\v_2\\v_3\end{bmatrix}$, such that applying transformation $T$ is same as taking dot product with $\overrightarrow{V}$ (Remember duality)
+
+=> $\begin{bmatrix}v_1\\v_2\\v_3\end{bmatrix}\cdot\begin{bmatrix}x\\y\\z\end{bmatrix}=det\left(\begin{bmatrix}x&a_1&b_1\\y&a_2&b_2\\z&a_3&b_3\end{bmatrix}\right)$  
+=> $v_1x+v_2y+v_3z=x(a_2b_3-b_2a_3)+y(b_1a_3-a_1b_3)+z(a_1b_3-b_1a_3)$  
+=> $v_1 = a_2b_3-b_2a_3$  
+=> $v_2 = b_1a_3-a_1b_3$  
+=> $v_3 = a_1b_3-b_1a_3$  
+
+Thease are the coordinates of $\overrightarrow{V}$, which is the cross product of $\overrightarrow{A}$ and $\overrightarrow{B}$, which is the same as that funky solution we study at school.
