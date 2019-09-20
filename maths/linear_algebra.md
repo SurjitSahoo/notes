@@ -23,7 +23,27 @@ and
 $\begin{bmatrix}a \\ b \\ c\end{bmatrix}$ = $a\hat{i}+b\hat{j}+c\hat{k}$ 
 
 
-* $\overrightarrow{A}+\overrightarrow{B}=\overrightarrow{C}$ ==> means if you walk along  $\overrightarrow{A}$ and then along $\overrightarrow{B}$, it’ll be same as walking along $\overrightarrow{C}$ ![](https://mathinsight.org/media/image/image/vector_a_plus_b.png){ width=100px }
+* $\overrightarrow{A}+\overrightarrow{B}=\overrightarrow{C}$ ==> means if you walk along  $\overrightarrow{A}$ and then along $\overrightarrow{B}$, it’ll be same as walking along $\overrightarrow{C}$  
+
+\tikzset{every picture/.style={line width=0.75pt}}
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,801); %set diagram left start at 0, and has height of 801
+%Straight Lines [id:da8985349911248783] 
+\draw [color={rgb, 255:red, 201; green, 177; blue, 177 }  ,draw opacity=1 ][line width=1.5]    (146,158) -- (192.26,120.23) ;
+\draw [shift={(194.58,118.33)}, rotate = 500.77] [fill={rgb, 255:red, 201; green, 177; blue, 177 }  ,fill opacity=1 ][line width=1.5]  [draw opacity=0] (13.4,-6.43) -- (0,0) -- (13.4,6.44) -- (8.9,0) -- cycle    ;
+%Straight Lines [id:da9239430887139868] 
+\draw [color={rgb, 255:red, 204; green, 200; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (194.58,118.33) -- (251.46,140.89) ;
+\draw [shift={(254.25,142)}, rotate = 201.64] [fill={rgb, 255:red, 204; green, 200; blue, 0 }  ,fill opacity=1 ][line width=1.5]  [draw opacity=0] (13.4,-6.43) -- (0,0) -- (13.4,6.44) -- (8.9,0) -- cycle    ;
+%Straight Lines [id:da9163364623185699] 
+\draw [color={rgb, 255:red, 25; green, 255; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (146,158) -- (251.28,142.44) ;
+\draw [shift={(254.25,142)}, rotate = 531.5899999999999] [fill={rgb, 255:red, 25; green, 255; blue, 0 }  ,fill opacity=1 ][line width=1.5]  [draw opacity=0] (13.4,-6.43) -- (0,0) -- (13.4,6.44) -- (8.9,0) -- cycle    ;
+% Text Node
+\draw (163.33,133.33) node [scale=0.5,color={rgb, 255:red, 201; green, 177; blue, 177 }  ,opacity=1 ] [align=left] {A};
+% Text Node
+\draw (223.33,121) node [scale=0.5,color={rgb, 255:red, 204; green, 200; blue, 0 }  ,opacity=1 ] [align=left] {B};
+% Text Node
+\draw (199.33,158.67) node [scale=0.5,color={rgb, 255:red, 25; green, 255; blue, 0 }  ,opacity=1 ] [align=left] {C};
+\end{tikzpicture}
 
   $\begin{bmatrix}a \\ b\end{bmatrix} + \begin{bmatrix}c \\ d\end{bmatrix}=\begin{bmatrix}a+c \\ b+d\end{bmatrix}$  
 
@@ -508,3 +528,285 @@ If $T=\begin{bmatrix}v_1&v_2&v_3\end{bmatrix}$ transforms $\begin{bmatrix}x\\y\\
 => $v_3 = a_1b_3-b_1a_3$  
 
 Thease are the coordinates of $\overrightarrow{V}$, which is the cross product of $\overrightarrow{A}$ and $\overrightarrow{B}$, which is the same as that funky solution we study at school.
+
+# Change of Basis
+
+**Basis** : As we know, basis is the base vectors / unit vectors in terms of which we describe all the vectors. For e.g. $\overrightarrow{A}=2\hat{i}+3\hat{j}$ here $\hat{i}$ and $\hat{j}$ are the basis vectors in our coordinate system.
+
+In our coordinate system, $\hat{i}=(1,0)$ and is pointing to the right, $\hat{j}=(0,1)$ which is pointing up. $\hat{i}$ and $\hat{j}$ are perpendicular to each other and their length is 1 unit.
+
+
+
+\tikzset{every picture/.style={line width=0.75pt}}
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,753); %set diagram left start at 0, and has height of 753
+
+%Shape: Grid [id:dp615562244133943] 
+\draw  [draw opacity=0][dash pattern={on 4.5pt off 4.5pt}] (30,30) -- (151,30) -- (151,131) -- (30,131) -- cycle ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (30,30) -- (30,131)(50,30) -- (50,131)(70,30) -- (70,131)(90,30) -- (90,131)(110,30) -- (110,131)(130,30) -- (130,131)(150,30) -- (150,131) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (30,30) -- (151,30)(30,50) -- (151,50)(30,70) -- (151,70)(30,90) -- (151,90)(30,110) -- (151,110)(30,130) -- (151,130) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}]  ;
+%Shape: Axis 2D [id:dp5289923327303094] 
+\draw [color={rgb, 255:red, 150; green, 148; blue, 148 }  ,draw opacity=1 ] (40.6,110) -- (134.6,110)(50,47.3) -- (50,116.97) (127.6,105) -- (134.6,110) -- (127.6,115) (45,54.3) -- (50,47.3) -- (55,54.3) (70,105) -- (70,115)(90,105) -- (90,115)(110,105) -- (110,115)(45,90) -- (55,90)(45,70) -- (55,70) ;
+\draw [color={rgb, 255:red, 99; green, 99; blue, 99 }  ,opacity=1 ]  (77,122) node[anchor=east, scale=0.75]{1} (97,122) node[anchor=east, scale=0.75]{2} (117,122) node[anchor=east, scale=0.75]{3} (47,90) node[anchor=east, scale=0.75]{1} (47,70) node[anchor=east, scale=0.75]{2} ;
+%Straight Lines [id:da7907191510979541] 
+\draw [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,draw opacity=1 ]   (50,110) -- (68,110) ;
+\draw [shift={(70,110)}, rotate = 180] [fill={rgb, 255:red, 68; green, 187; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da08591236108943567] 
+\draw [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,draw opacity=1 ]   (50,110) -- (50,92) ;
+\draw [shift={(50,90)}, rotate = 450] [fill={rgb, 255:red, 236; green, 215; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da8604970476920195] 
+\draw [color={rgb, 255:red, 196; green, 120; blue, 52 }  ,draw opacity=1 ]   (50,110) -- (108.34,71.11) ;
+\draw [shift={(110,70)}, rotate = 506.31] [fill={rgb, 255:red, 196; green, 120; blue, 52 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Shape: Grid [id:dp42484990994868554] 
+\draw  [draw opacity=0][dash pattern={on 4.5pt off 4.5pt}] (167.37,67.02) -- (278.79,19.84) -- (364.3,93.31) -- (252.88,140.49) -- cycle ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (167.37,67.02) -- (252.88,140.49)(185.79,59.22) -- (271.29,132.7)(204.2,51.42) -- (289.71,124.9)(222.62,43.62) -- (308.13,117.1)(241.04,35.83) -- (326.54,109.3)(259.45,28.03) -- (344.96,101.5)(277.87,20.23) -- (363.38,93.7) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (167.37,67.02) -- (278.79,19.84)(184.3,81.57) -- (295.72,34.39)(201.23,96.12) -- (312.66,48.94)(218.16,110.67) -- (329.59,63.49)(235.1,125.22) -- (346.52,78.04)(252.03,139.77) -- (363.45,92.59) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}]  ;
+%Shape: Axis 2D [id:dp9311114480875433] 
+\draw [color={rgb, 255:red, 150; green, 148; blue, 148 }  ,draw opacity=1 ] (244.85,121.07) -- (331.49,84.59)(200.48,71.72) -- (259.41,122.5) (320.81,83.67) -- (331.49,84.59) -- (329.26,90.95) (201.79,78.76) -- (200.48,71.72) -- (211.01,74.88) (267.72,106.01) -- (276.18,113.3)(286.15,98.25) -- (294.61,105.54)(304.58,90.49) -- (313.04,97.78)(231.99,104.78) -- (241.21,100.9)(215.07,90.2) -- (224.29,86.32) ;
+\draw [color={rgb, 255:red, 99; green, 99; blue, 99 }  ,opacity=1 ]  (291.4,116.43) node[anchor=east, scale=0.75]{1} (309.83,108.67) node[anchor=east, scale=0.75]{2} (328.27,100.91) node[anchor=east, scale=0.75]{3} (236.68,104.74) node[anchor=east, scale=0.75]{1} (219.77,90.17) node[anchor=east, scale=0.75]{2} ;
+%Straight Lines [id:da11304125073566951] 
+\draw [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,draw opacity=1 ]   (253.51,117.42) -- (270.09,110.4) ;
+\draw [shift={(271.93,109.62)}, rotate = 517.05] [fill={rgb, 255:red, 68; green, 187; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da6687830595734379] 
+\draw [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,draw opacity=1 ]   (253.51,117.42) -- (238.1,104.17) ;
+\draw [shift={(236.58,102.87)}, rotate = 400.66999999999996] [fill={rgb, 255:red, 236; green, 215; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da2683385139716927] 
+\draw [color={rgb, 255:red, 196; green, 120; blue, 52 }  ,draw opacity=1 ]   (253.51,117.42) -- (311.85,78.53) ;
+\draw [shift={(313.51,77.42)}, rotate = 506.31] [fill={rgb, 255:red, 196; green, 120; blue, 52 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Shape: Grid [id:dp7681422337699955] 
+\draw  [draw opacity=0][dash pattern={on 4.5pt off 4.5pt}] (409.49,31.43) -- (522.34,31.43) -- (522.34,132.2) -- (409.49,132.2) -- cycle ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (409.49,31.43) -- (409.49,132.2)(429.49,31.43) -- (429.49,132.2)(449.49,31.43) -- (449.49,132.2)(469.49,31.43) -- (469.49,132.2)(489.49,31.43) -- (489.49,132.2)(509.49,31.43) -- (509.49,132.2) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (409.49,31.43) -- (522.34,31.43)(409.49,51.43) -- (522.34,51.43)(409.49,71.43) -- (522.34,71.43)(409.49,91.43) -- (522.34,91.43)(409.49,111.43) -- (522.34,111.43)(409.49,131.43) -- (522.34,131.43) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}]  ;
+%Shape: Axis 2D [id:dp6852106606144879] 
+\draw [color={rgb, 255:red, 150; green, 148; blue, 148 }  ,draw opacity=1 ] (420.2,111.14) -- (514.2,111.14)(449.49,48.5) -- (449.49,118.17) (507.2,106.14) -- (514.2,111.14) -- (507.2,116.14) (444.49,55.5) -- (449.49,48.5) -- (454.49,55.5) (469.49,106.14) -- (469.49,116.14)(489.49,106.14) -- (489.49,116.14)(429.49,106.14) -- (429.49,116.14)(444.49,91.14) -- (454.49,91.14)(444.49,71.14) -- (454.49,71.14) ;
+\draw [color={rgb, 255:red, 99; green, 99; blue, 99 }  ,opacity=1 ]  (476.49,123.14) node[anchor=east, scale=0.75]{1} (496.49,123.14) node[anchor=east, scale=0.75]{2} (436.49,123.14) node[anchor=east, scale=0.75]{-1} (446.49,91.14) node[anchor=east, scale=0.75]{1} (446.49,71.14) node[anchor=east, scale=0.75]{2} ;
+%Straight Lines [id:da5380542207591497] 
+\draw [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,draw opacity=1 ]   (449.6,111.2) -- (487.81,92.09) ;
+\draw [shift={(489.6,91.2)}, rotate = 513.4300000000001] [fill={rgb, 255:red, 68; green, 187; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da3969076031550316] 
+\draw [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,draw opacity=1 ]   (449.6,111.2) -- (431.01,92.61) ;
+\draw [shift={(429.6,91.2)}, rotate = 405] [fill={rgb, 255:red, 236; green, 215; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+
+% Text Node
+\draw (77.67,81.67) node [color={rgb, 255:red, 196; green, 120; blue, 52 }  ,opacity=1 ] [align=left] {A};
+% Text Node
+\draw (58.33,120.33) node [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,opacity=1 ] [align=left] {i};
+% Text Node
+\draw (39.33,103.33) node [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,opacity=1 ] [align=left] {j};
+% Text Node
+\draw (264.33,123.58) node [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,opacity=1 ] [align=left] {i};
+% Text Node
+\draw (236.83,113.08) node [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,opacity=1 ] [align=left] {j};
+% Text Node
+\draw (278.67,88.17) node [color={rgb, 255:red, 196; green, 120; blue, 52 }  ,opacity=1 ] [align=left] {A};
+% Text Node
+\draw (475.48,107.86) node [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,opacity=1 ] [align=left] {i};
+% Text Node
+\draw (439.79,108.14) node [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,opacity=1 ] [align=left] {j};
+% Text Node
+\draw (86,157) node [color={rgb, 255:red, 117; green, 107; blue, 107 }  ,opacity=1 ] [align=left] {Surjit's Grid};
+% Text Node
+\draw (264,155) node [color={rgb, 255:red, 117; green, 107; blue, 107 }  ,opacity=1 ] [align=left] {Prachee's Grid};
+% Text Node
+\draw (462.67,159) node [color={rgb, 255:red, 117; green, 107; blue, 107 }  ,opacity=1 ] [align=left] {Translation from\\Prachee's Grid To\\Surjit's Grid };
+
+
+\end{tikzpicture}
+
+
+
+when I say $\overrightarrow{A}=3\hat{i}+2\hat{j}$, what I mean is walk $3\times length(\hat{i})$ in $\hat{i}$ direction then $2\times length(\hat{j})$ in $\hat{j}$ direction.(Here length of $\hat{i}$ and $\hat{j}$ are 1 unit each)
+
+Our vector entirely depends on the choice of grid system (angle, spacing between grid lines) and length, directions of basis vectors. That's a free choice we could have chosen any thing.
+
+Suppose I have a friend Prachee, who decided to chose her coordinate system and her basis vectors entirely different from ours as shown in the above picture.
+
+In her coordinate system, $\overrightarrow{A}=3\hat{i}+2\hat{j}$ would mean entirely different vector, because her $\hat{i}$ and $\hat{j}$ are different. To understand what she means by $\overrightarrow{A}$, we've to know what her basis vectors are.
+
+In terms of our coordinate system, Prachee's basis vectors are, $\hat{i}=\begin{bmatrix}2\\1\end{bmatrix}$ and $\hat{j}=\begin{bmatrix}-1\\1\end{bmatrix}$ as shown in the above picture
+
+So when she says, $\overrightarrow{A}=3\hat{i}+2\hat{j}$ &nbsp; what she means in our coordinate system is, &nbsp; $3\begin{bmatrix}2\\1\end{bmatrix}+2\begin{bmatrix}-1\\1\end{bmatrix}=\begin{bmatrix}4\\5\end{bmatrix}$
+
+It looks familiar.. it's matrix-vector multiplication / transformation $\begin{bmatrix}2&-1\\1&1\end{bmatrix}\begin{bmatrix}3\\2\end{bmatrix}=\begin{bmatrix}4\\5\end{bmatrix}$
+
+> Transformation matrix $T=\begin{bmatrix}2&-1\\1&1\end{bmatrix}$  translates her vector into our language i.e. when she says $\begin{bmatrix}3\\2\end{bmatrix}$ it means $\begin{bmatrix}4\\5\end{bmatrix}$. Similarly, to translate a vector from our coordinate system to her coordinate system, we've to apply that transformation in reverse, i.e. $\begin{bmatrix}2&-1\\1&1\end{bmatrix}^{-1}\begin{bmatrix}4\\5\end{bmatrix}=\begin{bmatrix}3\\2\end{bmatrix}$
+
+Hmmm... so now we know how to translate one vector from one base system to another base system.. But how about translating transformations from one base system to another base system ?
+
+&nbsp;
+
+In our grid system if we want to rotate the space $90^{\circ}$ counter-clockwise, our transformation matrix will look like $\begin{bmatrix}0&-1\\1&0\end{bmatrix}$, but what will Prachee's transformation matrix look like ?
+
+\tikzset{every picture/.style={line width=0.75pt}} 
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,753); %set diagram left start at 0, and has height of 753
+
+%Shape: Grid [id:dp615562244133943] 
+\draw  [draw opacity=0][dash pattern={on 4.5pt off 4.5pt}] (30,30) -- (184.33,30) -- (184.33,131) -- (30,131) -- cycle ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (30,30) -- (30,131)(50,30) -- (50,131)(70,30) -- (70,131)(90,30) -- (90,131)(110,30) -- (110,131)(130,30) -- (130,131)(150,30) -- (150,131)(170,30) -- (170,131) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (30,30) -- (184.33,30)(30,50) -- (184.33,50)(30,70) -- (184.33,70)(30,90) -- (184.33,90)(30,110) -- (184.33,110)(30,130) -- (184.33,130) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}]  ;
+%Shape: Axis 2D [id:dp5289923327303094] 
+\draw [color={rgb, 255:red, 150; green, 148; blue, 148 }  ,draw opacity=1 ] (29.13,90) -- (85.13,90)(50,47.1) -- (50,94.4) (78.13,85) -- (85.13,90) -- (78.13,95) (45,54.1) -- (50,47.1) -- (55,54.1) (70,85) -- (70,95)(45,70) -- (55,70) ;
+\draw [color={rgb, 255:red, 99; green, 99; blue, 99 }  ,opacity=1 ]  (77,102) node[anchor=east, scale=0.75]{1} (47,70) node[anchor=east, scale=0.75]{1} ;
+%Straight Lines [id:da7907191510979541] 
+\draw [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,draw opacity=1 ]   (50,90) -- (68,90) ;
+\draw [shift={(70,90)}, rotate = 180] [fill={rgb, 255:red, 68; green, 187; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da08591236108943567] 
+\draw [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,draw opacity=1 ]   (50,90) -- (50,72) ;
+\draw [shift={(50,70)}, rotate = 450] [fill={rgb, 255:red, 236; green, 215; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Shape: Grid [id:dp42484990994868554] 
+\draw  [draw opacity=0][dash pattern={on 4.5pt off 4.5pt}] (224.04,59.35) -- (335.46,12.17) -- (420.96,85.65) -- (309.54,132.83) -- cycle ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (224.04,59.35) -- (309.54,132.83)(242.45,51.56) -- (327.96,125.03)(260.87,43.76) -- (346.38,117.23)(279.29,35.96) -- (364.79,109.43)(297.7,28.16) -- (383.21,101.63)(316.12,20.36) -- (401.63,93.83)(334.54,12.56) -- (420.04,86.04) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (224.04,59.35) -- (335.46,12.17)(240.97,73.9) -- (352.39,26.72)(257.9,88.45) -- (369.32,41.27)(274.83,103) -- (386.25,55.82)(291.76,117.55) -- (403.19,70.37)(308.7,132.1) -- (420.12,84.92) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}]  ;
+%Shape: Axis 2D [id:dp9311114480875433] 
+\draw [color={rgb, 255:red, 150; green, 148; blue, 148 }  ,draw opacity=1 ] (301.52,113.4) -- (388.15,76.93)(257.15,64.05) -- (316.07,114.83) (377.47,76) -- (388.15,76.93) -- (385.93,83.29) (258.46,71.09) -- (257.15,64.05) -- (267.67,67.21) (324.38,98.35) -- (332.84,105.64)(342.82,90.59) -- (351.28,97.88)(361.25,82.83) -- (369.71,90.12)(288.66,97.11) -- (297.87,93.23)(271.74,82.54) -- (280.95,78.66) ;
+\draw [color={rgb, 255:red, 99; green, 99; blue, 99 }  ,opacity=1 ]  (348.07,108.76) node[anchor=east, scale=0.75]{1} (366.5,101) node[anchor=east, scale=0.75]{2} (384.93,93.24) node[anchor=east, scale=0.75]{3} (293.35,97.08) node[anchor=east, scale=0.75]{1} (276.43,82.5) node[anchor=east, scale=0.75]{2} ;
+%Straight Lines [id:da11304125073566951] 
+\draw [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,draw opacity=1 ]   (310.18,109.75) -- (326.76,102.73) ;
+\draw [shift={(328.6,101.95)}, rotate = 517.05] [fill={rgb, 255:red, 68; green, 187; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da6687830595734379] 
+\draw [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,draw opacity=1 ]   (310.18,109.75) -- (294.77,96.51) ;
+\draw [shift={(293.25,95.2)}, rotate = 400.66999999999996] [fill={rgb, 255:red, 236; green, 215; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Shape: Axis 2D [id:dp29005070582983494] 
+\draw [color={rgb, 255:red, 150; green, 148; blue, 148 }  ,draw opacity=1 ] (89.13,90) -- (169.33,90)(130,47.1) -- (130,94.4) (162.33,85) -- (169.33,90) -- (162.33,95) (125,54.1) -- (130,47.1) -- (135,54.1) (150,85) -- (150,95)(110,85) -- (110,95)(125,70) -- (135,70) ;
+\draw [color={rgb, 255:red, 99; green, 99; blue, 99 }  ,opacity=1 ]  (157,102) node[anchor=east, scale=0.75]{1} (117,102) node[anchor=east, scale=0.75]{-1} (127,70) node[anchor=east, scale=0.75]{1} ;
+%Straight Lines [id:da4080200943130452] 
+\draw [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,draw opacity=1 ]   (130,90) -- (130,72) ;
+\draw [shift={(130,70)}, rotate = 450] [fill={rgb, 255:red, 68; green, 187; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da2013429893506682] 
+\draw [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,draw opacity=1 ]   (130,90) -- (112,90) ;
+\draw [shift={(110,90)}, rotate = 360] [fill={rgb, 255:red, 236; green, 215; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Shape: Grid [id:dp03722792108984363] 
+\draw  [draw opacity=0][dash pattern={on 4.5pt off 4.5pt}] (405.24,52.95) -- (516.66,5.77) -- (602.16,79.25) -- (490.74,126.43) -- cycle ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (405.24,52.95) -- (490.74,126.43)(423.65,45.16) -- (509.16,118.63)(442.07,37.36) -- (527.58,110.83)(460.49,29.56) -- (545.99,103.03)(478.9,21.76) -- (564.41,95.23)(497.32,13.96) -- (582.83,87.43)(515.74,6.16) -- (601.24,79.64) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (405.24,52.95) -- (516.66,5.77)(422.17,67.5) -- (533.59,20.32)(439.1,82.05) -- (550.52,34.87)(456.03,96.6) -- (567.45,49.42)(472.96,111.15) -- (584.39,63.97)(489.9,125.7) -- (601.32,78.52) ; \draw  [color={rgb, 255:red, 204; green, 204; blue, 204 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}]  ;
+%Shape: Axis 2D [id:dp994841806392778] 
+\draw [color={rgb, 255:red, 150; green, 148; blue, 148 }  ,draw opacity=1 ] (534.43,72.82) -- (508.38,11.46)(495.77,108.78) -- (535.83,62.01) (507.48,22.15) -- (508.38,11.46) -- (514.75,13.67) (502.81,107.45) -- (495.77,108.78) -- (498.9,98.24) (520.37,52.52) -- (527.64,44.04)(512.56,34.11) -- (519.82,25.63)(519.25,88.25) -- (515.34,79.05) ;
+\draw [color={rgb, 255:red, 99; green, 99; blue, 99 }  ,opacity=1 ]  (537.73,29.8) node[anchor=east, scale=0.75]{1} (529.91,11.39) node[anchor=east, scale=0.75]{2} (526.21,84.55) node[anchor=east, scale=0.75]{1} ;
+%Straight Lines [id:da42278134995744465] 
+\draw [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,draw opacity=1 ]   (531.82,66.69) -- (525.37,50.15) ;
+\draw [shift={(524.65,48.29)}, rotate = 428.7] [fill={rgb, 255:red, 68; green, 187; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da8118993721001211] 
+\draw [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,draw opacity=1 ]   (531.82,66.69) -- (518.82,81.63) ;
+\draw [shift={(517.5,83.14)}, rotate = 311.03] [fill={rgb, 255:red, 236; green, 215; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+
+% Text Node
+\draw (141.58,83.33) node [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,opacity=1 ] [align=left] {i};
+% Text Node
+\draw (45,82) node [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,opacity=1 ] [align=left] {j};
+% Text Node
+\draw (320.67,115.92) node [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,opacity=1 ] [align=left] {i};
+% Text Node
+\draw (298.83,109.08) node [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,opacity=1 ] [align=left] {j};
+% Text Node
+\draw (103.75,149.25) node [color={rgb, 255:red, 117; green, 107; blue, 107 }  ,opacity=1 ] [align=left] {Surjit's Grid};
+% Text Node
+\draw (404.47,143.8) node [color={rgb, 255:red, 117; green, 107; blue, 107 }  ,opacity=1 ] [align=left] {Prachee's Grid};
+% Text Node
+\draw (126,98) node [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,opacity=1 ] [align=left] {j};
+% Text Node
+\draw (539.81,52.2) node [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,opacity=1 ] [align=left] {i};
+% Text Node
+\draw (535.12,80.51) node [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,opacity=1 ] [align=left] {j};
+
+
+\end{tikzpicture}
+
+You might think, huh easy.. just translate each column of our matrix to her language. simple right! No, because our matrix describes where our basis vectors land after transformation, if we translate each column of our matrix to her language, she'll get where our basis vectors will land after transformation but in her language. But that's wrong. She wants to know where her basis vectors will land after transformation, not ours.. and of course she wants it in her language.
+
+&nbsp;
+
+One way to think about it is...  
+ 1. Take any vector $\overrightarrow{V}$ in her language  
+ 2. Translate it to our language.  
+ 3. Apply transformation  
+ 4. Translate back to her language.  
+
+$\textcolor[rgb]{0,0.73,0.74}{\begin{bmatrix}
+2 & -1\\
+1 & 1
+\end{bmatrix}^{-1}}\textcolor[rgb]{0.21,0.5,0}{\begin{bmatrix}
+0 & -1\\
+1 & 0
+\end{bmatrix}}\textcolor[rgb]{0,0.73,0.74}{\begin{bmatrix}
+2 & -1\\
+1 & 1
+\end{bmatrix}}\textcolor[rgb]{0.76,0.7,0.09}{\vec{V}}$
+&nbsp; &nbsp; &nbsp; Applied from right to left one by one...
+
+&nbsp;  
+Expressions like $A^{-1}MA$ represents, $A$ and $A^{-1}$ : translation from one base system to another and vice versa and $M$ : some kind of transformation.
+
+
+# Igenvectors and Igenvalues
+
+After a transformation most of the vectors will move away from it's original span(rotate with some angle), but there'll be some special vectors which will only scale by a factor but not rotate.
+
+In the following transformation $T=\begin{bmatrix}3&1\\0&2\end{bmatrix}$, $\hat{i}$ is just scaled by 3, so all the vectors in the span of $\hat{i}$ will stay in that span after transformation, it is highlighted in green color in the following image, and other set of vectors which were in the span of yellow line, will stay in the yellow line after transformation. 
+
+> These set of vectors which stay in their original span after transformation are called eigenvectos and by what factors they are scaled / squished are called igenvalues of the transformation.
+
+
+
+\tikzset{every picture/.style={line width=0.75pt}} 
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,604); %set diagram left start at 0, and has height of 604
+
+%Shape: Grid [id:dp9125856180416749] 
+\draw  [draw opacity=0][dash pattern={on 4.5pt off 4.5pt}] (60,60) -- (331.5,60) -- (331.5,241.5) -- (60,241.5) -- cycle ; \draw  [color={rgb, 255:red, 201; green, 201; blue, 201 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (60,60) -- (60,241.5)(90,60) -- (90,241.5)(120,60) -- (120,241.5)(150,60) -- (150,241.5)(180,60) -- (180,241.5)(210,60) -- (210,241.5)(240,60) -- (240,241.5)(270,60) -- (270,241.5)(300,60) -- (300,241.5)(330,60) -- (330,241.5) ; \draw  [color={rgb, 255:red, 201; green, 201; blue, 201 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (60,60) -- (331.5,60)(60,90) -- (331.5,90)(60,120) -- (331.5,120)(60,150) -- (331.5,150)(60,180) -- (331.5,180)(60,210) -- (331.5,210)(60,240) -- (331.5,240) ; \draw  [color={rgb, 255:red, 201; green, 201; blue, 201 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}]  ;
+%Straight Lines [id:da6741773164712463] 
+\draw [color={rgb, 255:red, 171; green, 240; blue, 148 }  ,draw opacity=1 ]   (62,150) -- (328,150) ;
+\draw [shift={(330,150)}, rotate = 180] [fill={rgb, 255:red, 171; green, 240; blue, 148 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+\draw [shift={(60,150)}, rotate = 0] [fill={rgb, 255:red, 171; green, 240; blue, 148 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+%Straight Lines [id:da38396878925028455] 
+\draw [color={rgb, 255:red, 171; green, 240; blue, 148 }  ,draw opacity=1 ]   (92,150) -- (298,150) ;
+\draw [shift={(300,150)}, rotate = 180] [fill={rgb, 255:red, 171; green, 240; blue, 148 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+\draw [shift={(90,150)}, rotate = 0] [fill={rgb, 255:red, 171; green, 240; blue, 148 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+%Straight Lines [id:da20716200635727033] 
+\draw [color={rgb, 255:red, 171; green, 240; blue, 148 }  ,draw opacity=1 ]   (122,150) -- (268,150) ;
+\draw [shift={(270,150)}, rotate = 180] [fill={rgb, 255:red, 171; green, 240; blue, 148 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+\draw [shift={(120,150)}, rotate = 0] [fill={rgb, 255:red, 171; green, 240; blue, 148 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+%Straight Lines [id:da7991585243687713] 
+\draw [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,draw opacity=1 ]   (180,150) -- (268,150) ;
+\draw [shift={(270,150)}, rotate = 180] [fill={rgb, 255:red, 68; green, 187; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da5349784052088964] 
+\draw [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,draw opacity=1 ]   (180,150) -- (209.11,91.79) ;
+\draw [shift={(210,90)}, rotate = 476.57] [fill={rgb, 255:red, 236; green, 215; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da06890502254323683] 
+\draw [color={rgb, 255:red, 211; green, 209; blue, 93 }  ,draw opacity=1 ]   (91.41,61.41) -- (268.59,238.59) ;
+\draw [shift={(270,240)}, rotate = 225] [fill={rgb, 255:red, 211; green, 209; blue, 93 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+\draw [shift={(90,60)}, rotate = 45] [fill={rgb, 255:red, 211; green, 209; blue, 93 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+%Straight Lines [id:da827135506353204] 
+\draw [color={rgb, 255:red, 211; green, 209; blue, 93 }  ,draw opacity=1 ]   (121.41,91.41) -- (238.59,208.59) ;
+\draw [shift={(240,210)}, rotate = 225] [fill={rgb, 255:red, 211; green, 209; blue, 93 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+\draw [shift={(120,90)}, rotate = 45] [fill={rgb, 255:red, 211; green, 209; blue, 93 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+%Straight Lines [id:da4391292845783974] 
+\draw [color={rgb, 255:red, 211; green, 209; blue, 93 }  ,draw opacity=1 ]   (151.41,121.41) -- (208.59,178.59) ;
+\draw [shift={(210,180)}, rotate = 225] [fill={rgb, 255:red, 211; green, 209; blue, 93 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+\draw [shift={(150,120)}, rotate = 45] [fill={rgb, 255:red, 211; green, 209; blue, 93 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+% Text Node
+\draw (191.83,111.67) node [color={rgb, 255:red, 236; green, 215; blue, 0 }  ,opacity=1 ] [align=left] {j};
+% Text Node
+\draw (205.5,160.33) node [color={rgb, 255:red, 68; green, 187; blue, 0 }  ,opacity=1 ] [align=left] {i};
+% Text Node
+\draw (113.83,99) node [color={rgb, 255:red, 211; green, 209; blue, 93 }  ,opacity=1 ] [align=left] {2};
+% Text Node
+\draw (106.5,164.67) node [color={rgb, 255:red, 171; green, 240; blue, 148 }  ,opacity=1 ] [align=left] {3};
+
+
+\end{tikzpicture}
+
+In the avbove example, there are two sets of igen vectors having igenvalue = 2 for yellow, and igenvalue = 3 for green vectors. I means, after transformation, the yellow vectors will be scaled by 2 and green vectors will be scaled by 3, they'll not change directions.
+
+Alright but what is the use of it ?  
+Take for example a 3D object's rotation, if you can find it's igenvector, you've found it's axis of rotation, igenvalue will be 1, because it's rotation only. It's much easier to think about rotation in terms of axis of rotation and by what angle it rotates, rather than thinking about 3x3 matrix associated with this transformation.
+
