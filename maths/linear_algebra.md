@@ -750,7 +750,7 @@ After a transformation most of the vectors will move away from it's original spa
 
 In the following transformation $T=\begin{bmatrix}3&1\\0&2\end{bmatrix}$, $\hat{i}$ is just scaled by 3, so all the vectors in the span of $\hat{i}$ will stay in that span after transformation, it is highlighted in green color in the following image, and other set of vectors which were in the span of yellow line, will stay in the yellow line after transformation. 
 
-> These set of vectors which stay in their original span after transformation are called eigenvectos and by what factors they are scaled / squished are called igenvalues of the transformation.
+> These set of vectors which stay in their original span after transformation (only stretched or squished but not rotated) are called eigenvectos and by what factors they are scaled / squished are called igenvalues of the transformation.
 
 
 
@@ -807,6 +807,107 @@ In the following transformation $T=\begin{bmatrix}3&1\\0&2\end{bmatrix}$, $\hat{
 
 In the avbove example, there are two sets of igen vectors having igenvalue = 2 for yellow, and igenvalue = 3 for green vectors. I means, after transformation, the yellow vectors will be scaled by 2 and green vectors will be scaled by 3, they'll not change directions.
 
-Alright but what is the use of it ?  
-Take for example a 3D object's rotation, if you can find it's igenvector, you've found it's axis of rotation, igenvalue will be 1, because it's rotation only. It's much easier to think about rotation in terms of axis of rotation and by what angle it rotates, rather than thinking about 3x3 matrix associated with this transformation.
+**Alright but what is the use of it ?**  
+Take for example a 3D object's rotation, mathematically you'd describe this transformation with a 3x3 matrix. To find it's axis of ration, you just have to find it's igenvector, remember igenvector will not rotate(won't change direction), but all the other vectors will. it's igenvalue will be 1, because it's rotation only, so igenvector won't stretch or squish.  
 
+It's much easier to think about rotation in terms of axis of rotation and by what angle it rotates, rather than thinking about whole 3x3 matrix associated with this transformation.
+
+**Nice, but how to compute thease igenvectors and igenvalues ?**  
+
+\begin{tikzpicture}
+\Large \textcolor[rgb]{0,0.75,0.55}{$\textcolor[rgb]{0,0,0}{A}\textcolor[rgb]{0.05,0.82,0.59}{\vec{\textcolor[rgb]{0,0.79,0.69}{V}}}\textcolor[rgb]{0,0,0}{=}\textcolor[rgb]{0.57,0.53,0.03}{\lambda }\textcolor[rgb]{0.05,0.82,0.59}{\vec{V}}$}
+\end{tikzpicture}
+
+Here $\overrightarrow{V}$ is the igenvector, $\lambda$ is the igenvalue (a number / scaler) and $A$ is a transformation matrix. We've to solve for $\lambda$ and $\overrightarrow{V}$.  
+
+This equation means, I'm looking for vector $\overrightarrow{V}$ which upon transformation, only scales by a factor of $\lambda$, so applying transformation $A$ on $\overrightarrow{V}$ is same as scaling $\overrightarrow{V}$ by $\lambda$.
+
+But this equation has matrix-vector multiplication on one side and scaler-vector multiplication on the other side. Let's make it even and try to understand what it means.  
+
+&nbsp; &nbsp; &nbsp; $A\overrightarrow{V}=\lambda\overrightarrow{V}$  
+
+$=>A\overrightarrow{V}=\begin{bmatrix}\lambda&0&0\\0&\lambda&0\\0&0&\lambda\end{bmatrix}\overrightarrow{V}$ &nbsp; &nbsp; &nbsp; ($\lambda$ is a scaler, it only scales $\hat{i}$, $\hat{j}$ and $\hat{k}$, so all the other components are zero)  
+
+$=>A\overrightarrow{V}=\lambda\begin{bmatrix}1&0&0\\0&1&0\\0&0&1\end{bmatrix}\overrightarrow{V}$  
+
+$=>A\overrightarrow{V}=\lambda I\overrightarrow{V}$  
+$=>A\overrightarrow{V}-\lambda I\overrightarrow{V}=0$  
+$=>(A-\lambda I)\overrightarrow{V}=0$  
+
+$A-\lambda I$ is a matrix (matrix $-$ matrix). This matrix-vector multiplication is zero, it means when we apply this transformation on $\overrightarrow{V}$, it squishes the vector to zero (lower dimension). It'll always be true if $\overrightarrow{V}$ itself is zero, but that's boring.. what we want is a non-zero vector which is squished to zero after this transformation.
+
+We know, when a transformation squishes the space to a lower dimension, it's determinant must be zero.  
+This matrix would look something like this..
+
+$det\left(\begin{bmatrix}3-\textcolor[rgb]{0,0.7,0.54}{\lambda } & -5 & 7\\2 & 1-\textcolor[rgb]{0,0.7,0.54}{\lambda } & 4\\4 & -3 & 2-\textcolor[rgb]{0,0.7,0.54}{\lambda }\end{bmatrix}\right)=0$  
+
+\textcolor[rgb]{0.04,0.62,0.53}{For what value of $\lambda$ transformation will squish x, y and z components of a certain vector to zero}
+
+**example..**  
+let $T=\begin{bmatrix}3&1\\0&2\end{bmatrix}$  
+
+igenvalues:
+
+&nbsp; &nbsp; &nbsp; $det\left(\begin{bmatrix}3-\lambda&1\\0&2-\lambda\end{bmatrix}\right)=0$
+
+$=>(3-\lambda)(2-\lambda)-0=0$
+
+$=>\lambda=2$ &nbsp; & &nbsp; $\lambda=3$
+
+igenvectors: Plug the igenvalues in above matrix and solve for $\begin{bmatrix}x\\y\end{bmatrix}$
+
+1) $\begin{bmatrix}3-2&1\\0&2-2\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}0\\0\end{bmatrix}$
+
+2) $\begin{bmatrix}3-3&1\\0&2-3\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}0\\0\end{bmatrix}$
+
+>* 2D matrix doesn't have to have igenvectors. e.g. $90^\circ$ rotation matrix, it rotates every vector.  
+> $det\left(\begin{bmatrix}-\lambda&-1\\1&-\lambda\end{bmatrix}\right)=>\lambda^2=-1=>\lambda=\pm i$  
+> * Shear matrix: shear keeps the $\hat{i}$ fixed and moves $\hat{j}$, so it has one igenvector  
+> $det\left(\begin{bmatrix}1-\lambda&1\\0&1-\lambda\end{bmatrix}\right)=>(1-\lambda)^2=0=>\lambda=1$  
+> * It is also possible to have only one igenvalue, but more than one line full of igenvectors. e.g. a matrix that scales everything by 2.  
+> $\begin{bmatrix}2&0\\0&2\end{bmatrix}$ -> it's igenvalue is 2, but every vector is an igenvector, because they don't rotate, they just scale by 2.
+
+**Igenbasis & Speciality of diagonal matrix**
+
+Igenbasis is self explanatory, when the basis vectors themselves are igenvectors, it's called igenbasis. 
+
+As basis vectors are igenvectors, they won't rotate during the transformation, they'll just scale by some factor, so $\hat{i}$ will have only x-component, $\hat{j}$ will have only y-component and so on.. all the other components will be zero.
+
+$\begin{bmatrix}-5&0&0&0\\0&-2&0&0\\0&0&-4&0\\0&0&0&4\end{bmatrix}$ It's called diagonal matrix.
+
+Something's special about diagonal matrix.. applying same transformation multiple times is easy..
+
+$\begin{bmatrix}2&0\\0&3\end{bmatrix}\begin{bmatrix}2&0\\0&3\end{bmatrix}\begin{bmatrix}2&0\\0&3\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}2^3x\\3^3y\end{bmatrix}$
+
+Try multiplying non-diagonal matrix 100 times, it's a nightmare..
+
+But, you will rarely be lucky enough to get igenvectors which are also basis vectors. So what you can do is.. if you have multiple igenvectors, you can chose a set of any two igenvectors which span the full space, so that you can use them as basis vectors(see change of basis..)
+
+e.g.
+
+Above example $\begin{bmatrix}3&1\\0&2\end{bmatrix}$ has two igenvectors, yellow and green (see above picture) which span the full 2D space. We take use them as basis vectors.
+
+\tikzset{every picture/.style={line width=0.75pt}}
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,664); %set diagram left start at 0, and has height of 664
+
+%Shape: Grid [id:dp39945841643038493] 
+\draw  [draw opacity=0][dash pattern={on 4.5pt off 4.5pt}] (90,90) -- (241.5,90) -- (241.5,211) -- (90,211) -- cycle ; \draw  [color={rgb, 255:red, 202; green, 202; blue, 202 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (90,90) -- (90,211)(120,90) -- (120,211)(150,90) -- (150,211)(180,90) -- (180,211)(210,90) -- (210,211)(240,90) -- (240,211) ; \draw  [color={rgb, 255:red, 202; green, 202; blue, 202 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}] (90,90) -- (241.5,90)(90,120) -- (241.5,120)(90,150) -- (241.5,150)(90,180) -- (241.5,180)(90,210) -- (241.5,210) ; \draw  [color={rgb, 255:red, 202; green, 202; blue, 202 }  ,draw opacity=1 ][dash pattern={on 4.5pt off 4.5pt}]  ;
+%Shape: Axis 2D [id:dp8411426594721485] 
+\draw [color={rgb, 255:red, 119; green, 119; blue, 119 }  ,draw opacity=1 ] (110.17,180) -- (210.17,180)(150,117.23) -- (150,187.23) (203.17,175) -- (210.17,180) -- (203.17,185) (145,124.23) -- (150,117.23) -- (155,124.23) (180,175) -- (180,185)(120,175) -- (120,185)(145,150) -- (155,150) ;
+\draw   (187,192) node[anchor=east, scale=0.75]{1} (127,192) node[anchor=east, scale=0.75]{-1} (147,150) node[anchor=east, scale=0.75]{1} ;
+%Straight Lines [id:da011736166692797978] 
+\draw [color={rgb, 255:red, 102; green, 196; blue, 0 }  ,draw opacity=1 ]   (150,180) -- (178,180) ;
+\draw [shift={(180,180)}, rotate = 180] [fill={rgb, 255:red, 102; green, 196; blue, 0 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+%Straight Lines [id:da33341655648081336] 
+\draw [color={rgb, 255:red, 233; green, 215; blue, 4 }  ,draw opacity=1 ]   (150,180) -- (121.41,151.41) ;
+\draw [shift={(120,150)}, rotate = 405] [fill={rgb, 255:red, 233; green, 215; blue, 4 }  ,fill opacity=1 ][line width=0.75]  [draw opacity=0] (10.72,-5.15) -- (0,0) -- (10.72,5.15) -- (7.12,0) -- cycle    ;
+
+
+\end{tikzpicture}
+
+Now, our new basis vectors' coordinates are $\begin{bmatrix}1&-1\\0&1\end{bmatrix}$ Lets apply change of basis to above matrix.
+
+$\begin{bmatrix}1&-1\\0&1\end{bmatrix}^{-1}\begin{bmatrix}3&1\\0&2\end{bmatrix}\begin{bmatrix}1&-1\\0&1\end{bmatrix}=\begin{bmatrix}3&0\\0&2\end{bmatrix}$ This matrix represents the same transformation, but in new coordinate system. If you want to find out 100th power of this matrix, it'd be better to change the basis, convert it to diagnal matrix, calculate 100th power and then convert it back to normal basis. But for this, you have to have enough eigen vectors that span the full space. for example you can't convert shear transformation to diagonal matrix, because it has only one igen vector.
