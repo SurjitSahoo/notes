@@ -259,8 +259,14 @@ filter: grayscale(40%)
 Hardware pixels vs Software pixels [mydevice.io](MyDevice.io)
 
 ```html
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0,
-                               user-scalable=yes" >
+<meta
+  name="viewport"               // name of the meta
+  content="width=device-width,  // set viewport width
+  user-scalable=yes"            // user can zoom
+  initial-scale=1.0,            // initial zoom
+  maximum-scale=2.0,            // max zoom
+  minimum-scale=1.0,            // min zoom
+>
 ```
 
 ```scss
