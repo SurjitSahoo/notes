@@ -250,8 +250,8 @@ background-image: radial-gradient(ellipse closest-corner at 20% 50%, red, blue, 
 
 ```css
 filter: grayscale(40%)
-				blur(5px)
-				contrast(200%)
+        blur(5px)
+        contrast(200%)
 ```
 
 ## Responsive Design
