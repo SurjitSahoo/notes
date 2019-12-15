@@ -149,3 +149,42 @@ var _cf = new CircleFactory();
 var redCircle = _cf.create('red').item;
 var redCircle = _cf.create('blue').item;
 ```
+
+## Abstract Factory
+
+```js
+function RedCircle() {}
+
+RedCircle.prototype.create = function() {
+  this.item = 'red circle';
+  return this;
+}
+
+function BlueCircle() {}
+
+BlueCircle.prototype.create = function() {
+  this.item = 'blue circle';
+  return this;
+}
+
+var CircleFactory = function() {
+  this.creators = {};
+  this.create = function(type) {
+    return new this.creators[type]().create();
+  }
+
+  this.register = function(type, creator) {
+    // check if creator implements create method
+    if (creator.prototype.create) {
+      this.creators[type] = creator;
+    }
+  }
+}
+
+
+var _cf = new CircleFactory();
+_cf.register('red', RedCircle);
+_cf.register('blue', BlueCircle);
+var redCircle = _cf.create('red').item;
+var redCircle = _cf.create('blue').item;
+```
