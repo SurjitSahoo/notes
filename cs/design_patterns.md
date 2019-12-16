@@ -151,6 +151,10 @@ var redCircle = _cf.create('blue').item;
 ```
 
 ## Abstract Factory
+Abstract factory doesn't know the actual implementation of the creator function it just knows the interface.
+As in javascript there's no such thing as interface, I've implemented the creator functionality in prototype.
+
+Creator function(registered in factory) is not implemented, it has nothing in it's body.
 
 ```js
 function RedCircle() {}
@@ -186,5 +190,76 @@ var _cf = new CircleFactory();
 _cf.register('red', RedCircle);
 _cf.register('blue', BlueCircle);
 var redCircle = _cf.create('red').item;
-var redCircle = _cf.create('blue').item;
+var blueCircle = _cf.create('blue').item;
+```
+## Builder
+jQuery $ is a builder, it handles a lot of stuff behind the scene.  
+Builder doesn't necessarily create one item, it can create multiple items.
+
+it only makes sense when the creation process is complex and takes a lot of steps
+```js
+function Circle() {   // create circle
+  this.item = $(`<div class="circle"></div>`);
+}
+
+// property modifiers for circle
+Circle.prototype.color = function(clr) {
+  this.item.css('background', clr);
+}
+
+Circle.prototype.move = function(left, right) {
+  this.item.css('left', left);
+  this.item.css('right', right);
+}
+
+---------------------------------------------------------
+
+// Builders will use the above functions
+function RedCircleBuilder() {
+  this.item = new Circle();
+  this.init();
+}
+
+RedCircleBuilder.prototype.init() = function {
+  this.item.color('red');
+}
+
+RedCircleBuilder.prototype.get() = function {
+  return this.item;
+}
+
+function BlueCircleBuilder() {
+  this.item = new Circle();
+  this.init();
+}
+
+BlueCircleBuilder.prototype.init() = function {
+  this.item.color('blue');
+}
+
+BlueCircleBuilder.prototype.get() = function {
+  return this.item;
+}
+
+--------------------------------------------------------
+
+var CircleFactory = function() {
+  this.creators = {};
+  this.create = function(type) {
+    return new this.creators[type]().get();
+  }
+
+  this.register = function(type, creator) {
+    // check if creator implements create method
+    if (creator.prototype.init && creator.prototype.get) {
+      this.creators[type] = creator;
+    }
+  }
+}
+
+var _cf = new CircleFactory();
+_cf.register('red', RedCircleBuilder);
+_cf.register('blue', BlueCircleBuilder);
+var redCircle = _cf.create('red').item;
+var blueCircle = _cf.create('blue').item;
 ```
