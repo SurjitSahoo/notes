@@ -199,17 +199,16 @@ Builder doesn't necessarily create one item, it can create multiple items.
 it only makes sense when the creation process is complex and takes a lot of steps
 ```js
 function Circle() {   // create circle
-  this.item = $(`<div class="circle"></div>`);
+  this.item = { name: 'circle' };
 }
 
 // property modifiers for circle
 Circle.prototype.color = function(clr) {
-  this.item.css('background', clr);
+  this.item.color = clr;
 }
 
 Circle.prototype.move = function(left, right) {
-  this.item.css('left', left);
-  this.item.css('right', right);
+  this.item.css = {left: left, right: right};
 }
 
 ---------------------------------------------------------
@@ -261,5 +260,18 @@ var _cf = new CircleFactory();
 _cf.register('red', RedCircleBuilder);
 _cf.register('blue', BlueCircleBuilder);
 var redCircle = _cf.create('red').item;
-var blueCircle = _cf.create('blue').item;
+var blueCircle = _cf.create('blue');
+// _cf.create returns new Circle
+blueCircle.move(5,5);
 ```
+
+## Prototype
+It's memory efficient, because methods never get copied on inherited object/class they only get ref of the method.
+
+
+
+# Structural Design Patterns
+Always design in such a way it must be extensible without modifying existing code.  
+E.g. visual objects creation on web relies on document. No it can be jQuery object, canvas anything. Don't hard-code it define a function to set the stage, make it flexible.
+
+## 1. Adapter
