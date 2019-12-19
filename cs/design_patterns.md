@@ -277,4 +277,53 @@ E.g. visual objects creation on web relies on document. No it can be jQuery obje
 ## 1. Adapter
 
 
-<hr style="background: red;">
+<hr>
+<hr>
+<hr>
+
+# SOLID principles of programming
+Given by uncle Bob Martin
+
+## Single Responsibility
+One class should only care about one thing. e.g
+
+```js
+class Journal {
+  constructor() {
+    this.entries = {};
+  }
+
+  addEntry(txt) {
+    let c = ++Journal.count;
+    let entry = `${c}: ${txt}`;
+    this.entries[c] = entry;
+    return c;
+  }
+
+  removeEntry(index) {
+    delete this.entries[index];
+  }
+  toString() {
+    return Object.values(this.entries).join('\n');
+  }
+}
+
+Journal.count = 0;
+```
+
+If we want to add save to file/server functionality to the journal, it's better to do that in a separate class in such a way that it's flexible and usable by other stuff as well.
+
+```js
+class SaveLoad {
+  saveToFile(journal, filename) {
+    fs.writeFileSync(filename, journal.toString());
+  }
+
+  saveToServer(journal, url) {
+    // post the journal to url
+  }
+}
+```
+
+## Open-Close
+Open for extension, but closed for modification.
