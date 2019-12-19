@@ -275,3 +275,7 @@ Always design in such a way it must be extensible without modifying existing cod
 E.g. visual objects creation on web relies on document. No it can be jQuery object, canvas anything. Don't hard-code it define a function to set the stage, make it flexible.
 
 ## 1. Adapter
+
+
+###################################################################
+###################################################################
