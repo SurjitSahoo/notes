@@ -277,4 +277,4 @@ E.g. visual objects creation on web relies on document. No it can be jQuery obje
 ## 1. Adapter
 
 
-<hr>
+<hr style="background: red;">
