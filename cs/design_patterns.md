@@ -358,9 +358,9 @@ class ProductFilter {
 }
 ```
 
-If we're asked to add more search functionality like `filterBySize`, `filterByColorAndSize`, (imagine, if we had 3 specs, then we'll have to write 7 filter functions 🙁) we'll have to modify above class adding more functions (**State space explosion**).
+If we're asked to add more search functionality like `filterBySize`, `filterByColorAndSize`, we'll have to modify above class adding more functions. Imagine, if we had 3 specs, then we'll have to write 7 filter functions, what if we had more specs..🙁 (**State space explosion**).
 
-Bad practice, because it's well tested and deployed, we need to extend without modifying.
+Bad practice, because it might have been well tested and deployed, we need to extend without modifying.
 
 Ans:
 
@@ -370,8 +370,8 @@ class ColorSpecification {
     this.color = color;
   }
 
-  isSatisfied(product) {
-    return product.color === this.color;
+  isSatisfied(item) {
+    return item.color === this.color;
   }
 }
 
@@ -380,9 +380,24 @@ class SizeSpecification {
     this.size = size;
   }
 
-  isSatisfied(product) {
-    return product.size === this.size;
+  isSatisfied(item) {
+    return item.size === this.size;
   }
+}
+
+// handling multiple specifications
+class AndSpecification {
+  constructor(...specs) {
+    this.specs = specs;
+  }
+
+  isSatisfied(item) {
+    return this.specs.every(spec => spec.isSatisfied(item));
+  }
+}
+
+class OrSpecification {
+  //
 }
 
 class BetterFilter {
@@ -391,9 +406,84 @@ class BetterFilter {
   }
 }
 
+
 // usage
-let bf = new BetterFilter();
-const filteredItems = bf.filter(products, new SizeSpecification(Size.large))
+const bf = new BetterFilter();
+
+let spec = new SizeSpecification(Size.large);
+let filteredItems = bf.filter(products, spec);
+
+spec = new AndSpecification(
+  new ColorSpecification(Color.green),
+  new SizeSpecification(Size.large)
+);
+filteredItems = bf.filter(products, spec);
 ```
 
-If more specifications are needed, just define new spec. mix and match these for usage.
+If more specifications are needed, just define new spec.
+
+**Note:** It'd be better to use inheritance(base specification having `isSatisfied` interface, which should be implemented by derived class) but in javaScript it's messy to implement.
+
+## Liskov Substitution
+Function that works with object of base class must be able to work with object of derived class.
+
+```js
+class Rectangle {
+  constructor(width, height) {
+    this._width = width;
+    this._height = height;
+  }
+
+  get width() { return this._width; }
+  set width(width) { this._width = width; }
+
+  get height() { return this._height; }
+  set height(height) { this._height = height; }
+  
+  get area() {
+    return this._width * this._height;
+  }
+
+  toString() {
+    return `${this._width}x${this._height}`;
+  }
+}
+
+class Square extends Rectangle {
+  constructor(size) {
+    super(size, size);
+  }
+
+  set width(size) {
+    this._width = this._height = size;
+  }
+
+  set height(size) {
+    this._width = this._height = size;
+  }
+
+  set size(size) {
+    this._width = this._height = size;
+  }
+}
+
+
+function Tester(rect) {
+  const width = rect._width;
+  rect.height = 10;
+  console.log(`Expected area: ${10*width}, got: ${rect.area}`);
+}
+
+let rc = new Rectangle(3,4);
+console.log(rc.toString());
+
+let sq = new Square(5);
+sq.width = 5;
+console.log(sq.toString());
+Tester(rc);
+Tester(sq); //it'll fail
+```
+
+Here tester function will fail for **square**.  
+In this case we can make the function dynamic or we can entirely remove square class and add a method in rectangle class `isSquare()` to handle special case.
+
