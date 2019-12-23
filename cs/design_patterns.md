@@ -279,7 +279,7 @@ E.g. visual objects creation on web relies on document. No it can be jQuery obje
 
 <hr>
 <hr>
-<hr>
+
 
 # SOLID principles of programming
 Given by uncle Bob Martin
@@ -326,4 +326,74 @@ class SaveLoad {
 ```
 
 ## Open-Close
-Open for extension, but closed for modification.
+**Open for extension, but closed for modification.**  
+e.g. product search
+
+```js
+let Color = Object.freeze({
+  red: 'red',
+  green: 'green',
+  blue: 'blue',
+});
+
+let Size = Object.freeze({
+  small: 'small',
+  medium: 'medium',
+  large: 'large'
+});
+
+class Product {
+  constructor(name, color, size) {
+    this.name = name;
+    this.color = color;
+    this.size = size;
+  }
+}
+
+// search
+class ProductFilter {
+  filterByColor(products, color) {
+    return products.filter(p => p.color === color);
+  }
+}
+```
+
+If we're asked to add more search functionality like `filterBySize`, `filterByColorAndSize`, (imagine, if we had 3 specs, then we'll have to write 7 filter functions 🙁) we'll have to modify above class adding more functions (**State space explosion**).
+
+Bad practice, because it's well tested and deployed, we need to extend without modifying.
+
+Ans:
+
+```js
+class ColorSpecification {
+  constructor(color) {
+    this.color = color;
+  }
+
+  isSatisfied(product) {
+    return product.color === this.color;
+  }
+}
+
+class SizeSpecification {
+  constructor(size) {
+    this.size = size;
+  }
+
+  isSatisfied(product) {
+    return product.size === this.size;
+  }
+}
+
+class BetterFilter {
+  filter(items, spec) {
+    return items.filter(item => spec.isSatisfied(item));
+  }
+}
+
+// usage
+let bf = new BetterFilter();
+const filteredItems = bf.filter(products, new SizeSpecification(Size.large))
+```
+
+If more specifications are needed, just define new spec. mix and match these for usage.
