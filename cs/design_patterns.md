@@ -625,3 +625,118 @@ class Photocopier extends aggregation(Printer, Scanner) {
   }
 }
 ```
+
+## Dependency Inversion
+Usually our higher level classes / functions depend on mid-level and mid-level depends on low level. If we need to change low-level stuff, we shouldn't need to change high level stuff. e.g.  
+
+```js
+let relationship = Object.freeze({
+  parent: 0,
+  child: 1,
+  sibling: 2
+});
+
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+// Low-Level (Storage)
+class Relationship {
+  constructor() {
+    this.data = [];
+  }
+
+  addParentAndChild(parent, child) {
+    this.data.push({
+      from: parent,
+      type: relationship.parent,
+      to: child
+    });
+    this.data.push({
+      from: child,
+      type: relationship.child,
+      to: parent
+    });
+  }
+}
+
+// High-Level (Research)
+class Research {
+  constructor(relationships, parent) {
+    let relations = relationships.data; //💩💩💩
+    relations = relations.filter(rel => rel.from == parent && rel.type == relationships.parent);
+    for (let rel of relations) {
+      console.log(`${parent} has a child named ${rel.to.name}`);
+    }
+  }
+}
+
+let parent = new Person('John');
+let child1 = new Person('Chris');
+let child2 = new Person('Matt');
+
+// low-level module
+let rels = new Relationships();
+rels.addParentAndChild(parent, child1);
+rels.addParentAndChild(parent, child2);
+new Research(rels);
+```
+
+In `Research` we're using low level data directly assuming it's an array, if the data storage structure changed, our high level function won't work.
+
+**Note:** Higher level stuff shouldn't depend directly on low level stuff, instead it should depend on abstract/interface.
+
+
+To solve this, we can inverse the dependency. add the search functionality to the storage class itself, if storage mechanism changes, it should handle search mechanism as well.
+
+```js
+class RelationShipBrowser {
+  constructor() {
+    if (this.constructor.name === 'RelationShipBrowser') {
+      throw new Error('RelationShipBrowser is abstract');
+    }
+  }
+  
+  findAllChildrenOf(name) {
+    throw new Error('Not implemented') // Extend and override
+  }
+}
+
+// Low-Level (Storage)
+class Relationship extends RelationShipBrowser {
+  constructor() {
+    this.data = [];
+  }
+
+  addParentAndChild(parent, child) {
+    this.data.push({
+      from: parent,
+      type: relationship.parent,
+      to: child
+    });
+    this.data.push({
+      from: child,
+      type: relationship.child,
+      to: parent
+    });
+  }
+
+  findAllChildrenOf(name) {
+    return this.data.filter(rel =>
+      rel.from.name === name &&
+      rel.type === relationship.parent
+    ).map(rel => rel.to);
+  }
+}
+
+// High-Level (Research)
+class Research {
+  constructor(browser, parent) {
+    for (let child of browser.findAllChildrenOf(parent)) {
+      console.log(`${parent} has a child name ${child.name}`);
+    }
+  }
+}
+```
