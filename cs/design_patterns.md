@@ -487,3 +487,141 @@ Tester(sq); //it'll fail
 Here tester function will fail for **square**.  
 In this case we can make the function dynamic or we can entirely remove square class and add a method in rectangle class `isSquare()` to handle special case.
 
+## Interface Segregation
+
+```js
+class Machine {
+  constructor() {
+    if (this.constructor.name === 'Machine') {
+      throw new Error('Abstract Class');
+    }
+  }
+
+  // Interfaces
+  print(doc) {}
+  fax(doc) {}
+  scan(doc) {}
+}
+
+class MultiFunctionPrinter extends Machine {
+  print(doc) {
+    // ok
+  }
+  fax(doc) {
+    // ok
+  }
+  scan(doc) {
+    // ok
+  }
+}
+
+class NotImplementedError extends Error {
+  constructor(name) {
+    const msg = `${name} not implemented`;
+    super(msg);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, NotImplementedError);
+    }
+  }
+}
+
+// can't scan or fax
+class OldFashionedPrinter extends Machine {
+  print(doc) {
+    // ok
+  }
+
+  // we can totally remove the function
+  /*
+  fax(doc) {
+    // not gonna work
+  }
+  */
+
+  // or
+
+  // we can display an error
+  scan(doc) {
+    throw new NotImplementedError('scan');
+  }
+}
+```
+
+Either way it's not good practice.  
+If we don't implement the function, it'll show no results, which is confusing for user.  
+We're left with no choice than throwing an error.
+
+The programmer shouldn't be forced to implement the method, whether it's required or not.
+
+This is where **Interface Segregation** comes into play.
+
+**Note:** Interfaces should be separate.
+
+```js
+class Printer {
+  constructor() {
+    if (this.constructor.name === 'Printer') {
+      throw new Error('Abstract Class');
+    }
+  }
+
+  // Interface
+  print(doc) {}
+}
+
+class Scanner {
+  constructor() {
+    if (this.constructor.name === 'Scanner') {
+      throw new Error('Abstract Class');
+    }
+  }
+
+  // Interface
+  scan(doc) {}
+}
+
+// Usage
+class Photocopier extends Printer, Scanner { // not possible in JS
+  print(doc) {
+    //
+  }
+  scan(doc) {
+    //
+  }
+}
+
+// workaround to combine classes
+var aggregation = (baseClass, ...mixins) => {
+  class base extends baseClass {
+    constructor (...args) {
+      super(...args);
+      mixins.forEach((mixin) => {
+        copyProps(this,(new mixin));
+      });
+    }
+  }
+  let copyProps = (target, source) => {  // this function copies all properties and symbols, filtering out some special ones
+    Object.getOwnPropertyNames(source)
+      .concat(Object.getOwnPropertySymbols(source))
+      .forEach((prop) => {
+        if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/))
+          Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop));
+      })
+  };
+  mixins.forEach((mixin) => {
+    // outside constructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
+    copyProps(base.prototype, mixin.prototype);
+    copyProps(base, mixin);
+  });
+  return base;
+};
+
+class Photocopier extends aggregation(Printer, Scanner) {
+  print(doc) {
+    //
+  }
+  scan(doc) {
+    //
+  }
+}
+```
