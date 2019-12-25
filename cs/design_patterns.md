@@ -281,7 +281,7 @@ E.g. visual objects creation on web relies on document. No it can be jQuery obje
 <hr>
 
 
-# SOLID principles of programming
+<h1 align="center"> SOLID principles of programming</h1>
 Given by uncle Bob Martin
 
 ## Single Responsibility
@@ -740,3 +740,120 @@ class Research {
   }
 }
 ```
+
+<h1 align="center">Structural</h1>
+
+Simplifies/provides flexible solution for building complex objects.  
+Creates complex objects using simple objects providing step by step approach.  
+Builder uses actual construction methods to build the objects, it's like a wrapper around actual construction methods which simplifies building.
+
+e.g. HTML builder
+
+```js
+// This is where actual HTML is constructed
+class Tag
+{
+  static get indentSize() { return 2; }
+
+  constructor(name='', text='')
+  {
+    this.name = name;
+    this.text = text;
+    this.children = [];
+  }
+
+  toStringImpl(indent)  // traverse the tree and convert to string
+  {
+    let html = [];
+    let i = ' '.repeat(indent * Tag.indentSize);
+    html.push(`${i}<${this.name}>\n`);
+    if (this.text.length > 0)
+    {
+      html.push(' '.repeat(Tag.indentSize * (indent+1)));
+      html.push(this.text);
+      html.push('\n');
+    }
+
+    for (let child of this.children)
+      html.push(child.toStringImpl(indent+1));
+
+    html.push(`${i}</${this.name}>\n`);
+    return html.join();
+  }
+
+  toString()
+  {
+    return this.toStringImpl(0);
+  }
+
+  static create(name)
+  {
+    return new HtmlBuilder(name);
+  }
+}
+
+// help simplify building. Uses Tag class
+class HtmlBuilder
+{
+  constructor(rootName)
+  {
+    this.root = new Tag(rootName);
+    this.rootName = rootName;
+  }
+
+  // non-fluent
+  addChild(childName, childText)
+  {
+    let child = new Tag(childName, childText);
+    this.root.children.push(child);
+  }
+
+  // fluent
+  addChildFluent(childName, childText)
+  {
+    let child = new Tag(childName, childText);
+    this.root.children.push(child);
+    return this;
+  }
+
+  toString()
+  {
+    return this.root.toString();
+  }
+
+  clear() // remove all the children
+  {
+    this.root = new Tag(this.rootName);
+  }
+
+  build() // get tag along with all the children
+  {
+    return this.root;
+  }
+}
+
+// USAGE
+
+const words = ['hello', 'world'];
+
+let builder = new HtmlBuilder('ul');
+// or
+let builder = Tag.create('ul');
+
+for (let word of words) // non-fluent builder
+  builder.addChild('li', word);
+
+console.log(builder.toString());
+// or
+console.log( builder.build().toString());
+
+// fluent builder
+builder.clear();
+builder
+  .addChildFluent('li', 'foo')
+  .addChildFluent('li', 'bar')
+  .addChildFluent('li', 'baz');
+console.log(builder.toString());
+```
+
+**Note:** Instead of using `Tag` directly, builder should be used.
