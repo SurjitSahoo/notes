@@ -743,9 +743,9 @@ class Research {
 
 <h1 align="center">Structural</h1>
 
-Simplifies/provides flexible solution for building complex objects.  
-Creates complex objects using simple objects providing step by step approach.  
-Builder uses actual construction methods to build the objects, it's like a wrapper around actual construction methods which simplifies building.
+* Simplifies/provides flexible solution for building complex objects.  
+* Creates complex objects using simple objects providing step by step approach.  
+* Builder uses actual construction methods to build the objects, it's like a wrapper around actual construction methods which simplifies building.
 
 e.g. HTML builder
 
@@ -857,3 +857,4 @@ console.log(builder.toString());
 ```
 
 **Note:** Instead of using `Tag` directly, builder should be used.
+
