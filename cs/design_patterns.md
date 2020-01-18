@@ -276,10 +276,16 @@ E.g. visual objects creation on web relies on document. No it can be jQuery obje
 
 ## 1. Adapter
 
-
+<hr>
+<pre>
+🐍🐍    🐍    🐍  🐍🐍🐍🐍🐍  🐍    🐍    🐍🐍🐍    🐍      🐍
+🐍  🐍   🐍  🐍       🐍      🐍    🐍   🐍     🐍  🐍🐍    🐍
+🐍🐍      🐍🐍        🐍      🐍🐍🐍🐍  🐍      🐍  🐍  🐍  🐍
+🐍         🐍         🐍      🐍    🐍   🐍     🐍  🐍    🐍🐍
+🐍         🐍         🐍      🐍    🐍    🐍🐍🐍    🐍      🐍
+</pre>
 <hr>
 <hr>
-
 
 <h1 align="center"> SOLID principles of programming</h1>
 Given by uncle Bob Martin
@@ -287,41 +293,37 @@ Given by uncle Bob Martin
 ## Single Responsibility
 One class should only care about one thing. e.g
 
-```js
-class Journal {
-  constructor() {
-    this.entries = {};
-  }
+```python
+class Journal:
+  def __init__(self):
+    self.entries = []
+    self.count = 0
 
-  addEntry(txt) {
-    let c = ++Journal.count;
-    let entry = `${c}: ${txt}`;
-    this.entries[c] = entry;
-    return c;
-  }
+  def add_entry(self, txt)
+    self.count += 1
+    self.entries.append(f'{self.count}:{text}')
 
-  removeEntry(index) {
-    delete this.entries[index];
-  }
-  toString() {
-    return Object.values(this.entries).join('\n');
-  }
-}
+  def remove_entry(self, index):
+    del this.entries[index]
 
-Journal.count = 0;
+  def __str__(self):
+    return '\n'.join(self.entries)
+
 ```
 
-If we want to add save to file/server functionality to the journal, it's better to do that in a separate class in such a way that it's flexible and usable by other stuff as well.
+If we want to add save to file/server functionality to the journal, it's better to do that in a separate class in such a way that it's flexible and usable by other classes/stuff as well.
 
-```js
-class SaveLoad {
-  saveToFile(journal, filename) {
-    fs.writeFileSync(filename, journal.toString());
-  }
+**NOTE:** Don't add unnecessary functionality to `Journal` class
 
-  saveToServer(journal, url) {
-    // post the journal to url
-  }
+```python
+class SaveLoad:
+  def save_to_file(filename, journal):
+    with open(filename, 'w') as f:
+      file.write(str(journal))
+
+
+  def save_to_url(url, journal):
+    pass
 }
 ```
 
@@ -329,95 +331,110 @@ class SaveLoad {
 **Open for extension, but closed for modification.**  
 e.g. product search
 
-```js
-let Color = Object.freeze({
-  red: 'red',
-  green: 'green',
-  blue: 'blue',
-});
+```python
+from enum import Enum
 
-let Size = Object.freeze({
-  small: 'small',
-  medium: 'medium',
-  large: 'large'
-});
+class Color(Enum):
+  RED = 1
+  GREEN = 2
+  BLUE = 3
 
-class Product {
-  constructor(name, color, size) {
-    this.name = name;
-    this.color = color;
-    this.size = size;
-  }
-}
+class Size(Enum):
+  SMALL = 1
+  MEDIUM = 2
+  LARGE = 3
 
-// search
-class ProductFilter {
-  filterByColor(products, color) {
-    return products.filter(p => p.color === color);
-  }
-}
+class Product:
+  def __init__(self, name, color, size):
+    self.name = name
+    self.color = color
+    self.size = size
+
+
+# search
+class ProductFilter:
+  def filter_by_color(self, products, color):
+    for p in products:
+      if p.color == color:
+        yield p
 ```
 
 If we're asked to add more search functionality like `filterBySize`, `filterByColorAndSize`, we'll have to modify above class adding more functions. Imagine, if we had 3 specs, then we'll have to write 7 filter functions, what if we had more specs..🙁 (**State space explosion**).
 
-Bad practice, because it might have been well tested and deployed, we need to extend without modifying.
+Bad practice, because it might have been well tested and deployed, we need to extend, but without modifying.
 
 Ans:
 
-```js
-class ColorSpecification {
-  constructor(color) {
-    this.color = color;
-  }
+```python
+# Abstract class
+class Specification:
+  def __and__(self, other):
+    return AndSpecification(self, other)
+  
+  def __or__(self, other):
+    return OrSpecification(self, other)
 
-  isSatisfied(item) {
-    return item.color === this.color;
-  }
-}
+  def is_satisfied(self, item):
+    raise NotImplementedError("Interface not implemented")
 
-class SizeSpecification {
-  constructor(size) {
-    this.size = size;
-  }
+class Filter:
+  def filter(self, items, spec):
+    raise NotImplementedError("Interface not implemented")
 
-  isSatisfied(item) {
-    return item.size === this.size;
-  }
-}
+# Class implementations
+class ColorSpecification(Specification):
+  def __init__(self, color):
+    self.color = color
 
-// handling multiple specifications
-class AndSpecification {
-  constructor(...specs) {
-    this.specs = specs;
-  }
-
-  isSatisfied(item) {
-    return this.specs.every(spec => spec.isSatisfied(item));
-  }
-}
-
-class OrSpecification {
-  //
-}
-
-class BetterFilter {
-  filter(items, spec) {
-    return items.filter(item => spec.isSatisfied(item));
-  }
-}
+  def is_satisfied(self, item):
+    return item.color == self.color
 
 
-// usage
-const bf = new BetterFilter();
+class SizeSpecification(Specification):
+  def __init__(self, size):
+    self.size = size
 
-let spec = new SizeSpecification(Size.large);
-let filteredItems = bf.filter(products, spec);
+  def is_satisfied(self, item):
+    return item.size == self.size
 
-spec = new AndSpecification(
-  new ColorSpecification(Color.green),
-  new SizeSpecification(Size.large)
-);
-filteredItems = bf.filter(products, spec);
+# handling multiple specifications
+class AndSpecification(Specification):
+  def __init__(self, specs1, spec2):
+    self.spec1 = spec1
+    self.spec2 = spec2
+
+  def is_satisfied(item):
+    return self.spec1.is_satisfied(item) and \
+           self.spec2.is_satisfied(item)
+
+
+class OrSpecification:
+  def __init__(self, specs1, spec2):
+    self.spec1 = spec1
+    self.spec2 = spec2
+
+  def is_satisfied(item):
+    return self.spec1.is_satisfied(item) or \
+           self.spec2.is_satisfied(item)
+
+# Filter
+class BetterFilter(Filter):
+  def filter(self, items, spec):
+    for item in items:
+      if spec.is_satisfied(item):
+        yield item
+
+# usage
+bf = BetterFilter()
+
+large = SizeSpecification(Size.LARGE)
+for item in bf.filter(products, spec):
+  print(item)
+
+large_green = AndSpecification(large, ColorSpecification(Color.GREEN))
+large_green = large and ColorSpecification(color.GREEN)
+for item in bf.filter(products, spec):
+  print(item)
 ```
 
 If more specifications are needed, just define new spec.
@@ -427,318 +444,209 @@ If more specifications are needed, just define new spec.
 ## Liskov Substitution
 Function that works with object of base class must be able to work with object of derived class.
 
-```js
-class Rectangle {
-  constructor(width, height) {
-    this._width = width;
-    this._height = height;
-  }
+```python
+class Rectangle:
+  def __init__(self, width, height):
+    self._width = width
+    self._height = height
 
-  get width() { return this._width; }
-  set width(width) { this._width = width; }
+  @property
+  def width(self): return self._width
+  @width.setter
+  def width(self, width): self._width = width
 
-  get height() { return this._height; }
-  set height(height) { this._height = height; }
+  @property
+  def height(self): return self._height
+  @height.setter
+  def height(self, height): self._height = height
   
-  get area() {
-    return this._width * this._height;
-  }
+  @property
+  def area(self): return self._width * self._height
 
-  toString() {
-    return `${this._width}x${this._height}`;
-  }
-}
-
-class Square extends Rectangle {
-  constructor(size) {
-    super(size, size);
-  }
-
-  set width(size) {
-    this._width = this._height = size;
-  }
-
-  set height(size) {
-    this._width = this._height = size;
-  }
-
-  set size(size) {
-    this._width = this._height = size;
-  }
-}
+  def __str__(self):
+    return f'Rectangle: {self.width}x{self.height}'
 
 
-function Tester(rect) {
-  const width = rect._width;
-  rect.height = 10;
-  console.log(`Expected area: ${10*width}, got: ${rect.area}`);
-}
+# following function uses the above class
+def user_function(rect):
+  width = rect.width
+  rect.height = 10
+  print(f'Expected area: {10*width}, but got: {rect.area}')
 
-let rc = new Rectangle(3,4);
-console.log(rc.toString());
+---------------------------------------
+rc = Rectangle(3, 4)
+user_function(rc)
+# >>> Expected area: 30, but got 30 😃
+---------------------------------------
 
-let sq = new Square(5);
-sq.width = 5;
-console.log(sq.toString());
-Tester(rc);
-Tester(sq); //it'll fail
+class Square(Rectangle):
+  def __init__(self, size):
+    super().__init__(size, size)
+
+  @Rectangle.width.setter
+  def width(self, size):
+    self._width = self._height = size
+
+  @Rectangle.height.setter
+  def height(self, size):
+    self._width = self._height = size
+
+---------------------------------------
+sq = Square(5)
+user_function(sq)
+# >>> Expected area: 50, but got: 100 💩
+# Failed because function changes height,
+# which alters both height and width internally
+---------------------------------------
 ```
 
-Here tester function will fail for **square**.  
-In this case we can make the function dynamic or we can entirely remove square class and add a method in rectangle class `isSquare()` to handle special case.
+**SOLUTION:** We can make the function dynamic by removing the hard coded values or we can entirely remove square class and add a method in rectangle class `isSquare()` to handle special case.
 
 ## Interface Segregation
 
-```js
-class Machine {
-  constructor() {
-    if (this.constructor.name === 'Machine') {
-      throw new Error('Abstract Class');
-    }
-  }
+```py
+from abc import ABCMeta, abstractmethod
 
-  // Interfaces
-  print(doc) {}
-  fax(doc) {}
-  scan(doc) {}
-}
+class Machine(metaclass=ABCMeta):
+  '''Abstract class'''
+  @abstractmethod
+  def print(self, doc):
+    pass
+  @abstractmethod
+  def fax(doc):
+    pass
+  @abstractmethod
+  def scan(doc):
+    pass
 
-class MultiFunctionPrinter extends Machine {
-  print(doc) {
-    // ok
-  }
-  fax(doc) {
-    // ok
-  }
-  scan(doc) {
-    // ok
-  }
-}
+# can print, fax and scan
+class MultiFunctionPrinter(Machine):
+  def print(self, doc):
+    print(f'Printed {doc}')
 
-class NotImplementedError extends Error {
-  constructor(name) {
-    const msg = `${name} not implemented`;
-    super(msg);
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, NotImplementedError);
-    }
-  }
-}
+  def fax(self, doc):
+    print(f'Faxed {doc}')
+  
+  def scan(self, doc):
+    print(f'Scanned {doc}')
 
-// can't scan or fax
-class OldFashionedPrinter extends Machine {
-  print(doc) {
-    // ok
-  }
 
-  // we can totally remove the function
-  /*
-  fax(doc) {
-    // not gonna work
-  }
-  */
+# can't scan or fax
+class OldFashionedPrinter(Machine):
+  def print(self, doc):
+    print(f'Printed {doc}')
 
-  // or
+  # We can't define the rest of the functions,
+  # because this printer is not capable of those,
+  # if we define the function leaving it empty,
+  # it'll be a surprise, user will have no idea what's going on
 
-  // we can display an error
-  scan(doc) {
-    throw new NotImplementedError('scan');
-  }
-}
+  # But interface exits
+  # When someone tries to scan / fax,
+  # he'll get not implemented error 💩
 ```
 
-Either way it's not good practice.  
-If we don't implement the function, it'll show no results, which is confusing for user.  
-We're left with no choice than throwing an error.
+This is where **Interface Segregation** comes into play. This basically means Interfaces should be separate.
 
-The programmer shouldn't be forced to implement the method, whether it's required or not.
+```py
+from abc import ABCMeta, abstractmethod
 
-This is where **Interface Segregation** comes into play.
+class Printer(metaclass=ABCMeta):
+  @abstractmethod
+  def print(self, doc): pass
 
-**Note:** Interfaces should be separate.
+class Scanner(metaclass=ABCMeta):
+  @abstractmethod
+  def scan(self, doc): pass
 
-```js
-class Printer {
-  constructor() {
-    if (this.constructor.name === 'Printer') {
-      throw new Error('Abstract Class');
-    }
-  }
+class Fax(metaclass=ABCMeta):
+  @abstractmethod
+  def fax(self, doc): pass
 
-  // Interface
-  print(doc) {}
-}
+# Usage
+class Photocopier(Printer, Scanner)
+  def print(self, doc):
+    print(f'Printed {doc}')
 
-class Scanner {
-  constructor() {
-    if (this.constructor.name === 'Scanner') {
-      throw new Error('Abstract Class');
-    }
-  }
-
-  // Interface
-  scan(doc) {}
-}
-
-// Usage
-class Photocopier extends Printer, Scanner { // not possible in JS
-  print(doc) {
-    //
-  }
-  scan(doc) {
-    //
-  }
-}
-
-// workaround to combine classes
-var aggregation = (baseClass, ...mixins) => {
-  class base extends baseClass {
-    constructor (...args) {
-      super(...args);
-      mixins.forEach((mixin) => {
-        copyProps(this,(new mixin));
-      });
-    }
-  }
-  let copyProps = (target, source) => {  // this function copies all properties and symbols, filtering out some special ones
-    Object.getOwnPropertyNames(source)
-      .concat(Object.getOwnPropertySymbols(source))
-      .forEach((prop) => {
-        if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/))
-          Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop));
-      })
-  };
-  mixins.forEach((mixin) => {
-    // outside constructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
-    copyProps(base.prototype, mixin.prototype);
-    copyProps(base, mixin);
-  });
-  return base;
-};
-
-class Photocopier extends aggregation(Printer, Scanner) {
-  print(doc) {
-    //
-  }
-  scan(doc) {
-    //
-  }
-}
+  def scan(self, doc):
+    print(f'scanned {doc}')
 ```
 
 ## Dependency Inversion
-Usually our higher level classes / functions depend on mid-level and mid-level depends on low level. If we need to change low-level stuff, we shouldn't need to change high level stuff. e.g.  
+High level modules shouldn't depend directly on low level modules, it should depend on abstractions instead.
 
-```js
-let relationship = Object.freeze({
-  parent: 0,
-  child: 1,
-  sibling: 2
-});
+Usually our higher level classes / functions depend on mid-level and mid-level depends on low level. If we need to change low-level stuff, we shouldn't need to modify high level stuff.
 
-class Person {
-  constructor(name) {
-    this.name = name;
-  }
-}
+```py
+class Relationship(Enum):
+  PARENT = 0
+  CHILD = 1
+  SIBLING = 2
 
-// Low-Level (Storage)
-class Relationship {
-  constructor() {
-    this.data = [];
-  }
+class Person:
+  def __init__(self, name):
+    self.name = name
 
-  addParentAndChild(parent, child) {
-    this.data.push({
-      from: parent,
-      type: relationship.parent,
-      to: child
-    });
-    this.data.push({
-      from: child,
-      type: relationship.child,
-      to: parent
-    });
-  }
-}
+# Low-Level (Storage)
+class Relation:
+  def __init__(self, name):
+    self.relations = []
 
-// High-Level (Research)
-class Research {
-  constructor(relationships, parent) {
-    let relations = relationships.data; //💩💩💩
-    relations = relations.filter(rel => rel.from == parent && rel.type == relationships.parent);
-    for (let rel of relations) {
-      console.log(`${parent} has a child named ${rel.to.name}`);
-    }
-  }
-}
+  def add_parent_and_child(self, parent, child):
+    self.relations.append(
+      (parent, Relationship.PARENT, child)
+      (child, Relationship.CHILD, parent))
 
-let parent = new Person('John');
-let child1 = new Person('Chris');
-let child2 = new Person('Matt');
+# High-Level (Research)
+class Research:
+  def __init__(self, relations, parent):
+    relations = relations.relations;     # directly related 💩💩💩
+    for r in relations:
+      if r[0].name == parent and r[1] == Relationship.PARENT:
+        print(f'{parent} has a child {r[2].name}')
 
-// low-level module
-let rels = new Relationships();
-rels.addParentAndChild(parent, child1);
-rels.addParentAndChild(parent, child2);
-new Research(rels);
+
+parent = Person('John')
+child1 = Person('Chris')
+child2 = Person('Matt')
+
+relations = Relation()
+relations.addParentAndChild(parent, child1)
+relations.addParentAndChild(parent, child2)
+Research(relations)
 ```
 
-In `Research` we're using low level data directly assuming it's an array, if the data storage structure changed, our high level function won't work.
-
-**Note:** Higher level stuff shouldn't depend directly on low level stuff, instead it should depend on abstract/interface.
-
+In `class Research` we're directly depending on low level data and assuming it's an array, if the data structure for storage changed from array to something else, our high level function won't work.
 
 To solve this, we can inverse the dependency. add the search functionality to the storage class itself, if storage mechanism changes, it should handle search mechanism as well.
 
-```js
-class RelationShipBrowser {
-  constructor() {
-    if (this.constructor.name === 'RelationShipBrowser') {
-      throw new Error('RelationShipBrowser is abstract');
-    }
-  }
-  
-  findAllChildrenOf(name) {
-    throw new Error('Not implemented') // Extend and override
-  }
-}
+```py
+from abc import ABCMeta, abstractmethod
 
-// Low-Level (Storage)
-class Relationship extends RelationShipBrowser {
-  constructor() {
-    this.data = [];
-  }
+class RelationShipBrowser(metaclass=ABCMeta):
+  @abstractmethod  
+  def findAllChildrenOf(name): pass
 
-  addParentAndChild(parent, child) {
-    this.data.push({
-      from: parent,
-      type: relationship.parent,
-      to: child
-    });
-    this.data.push({
-      from: child,
-      type: relationship.child,
-      to: parent
-    });
-  }
+# Low-Level (Storage)
+class Relationship(RelationShipBrowser)
+  def __init__(self):
+    self.relations = []
 
-  findAllChildrenOf(name) {
-    return this.data.filter(rel =>
-      rel.from.name === name &&
-      rel.type === relationship.parent
-    ).map(rel => rel.to);
-  }
-}
+  def add_parent_and_child(self, parent, child):
+    self.relations.append(
+      (parent, Relationship.PARENT, child)
+      (child, Relationship.CHILD, parent))
 
-// High-Level (Research)
-class Research {
-  constructor(browser, parent) {
-    for (let child of browser.findAllChildrenOf(parent)) {
-      console.log(`${parent} has a child name ${child.name}`);
-    }
-  }
-}
+  def find_all_children_of(self, name) {
+    for r in self.relations:
+      if r[0].name == parent and r[1] == Relationship.PARENT:
+        yield r[2].name
+
+# High-Level (Research)
+class Research:
+  def __init__(self, browser, parent):
+    for child in browser.find_all_children_of(parent):
+      print(f'{parent} has a child called {child}')
 ```
 
 **<h1 align="center">Structural</h1>**
