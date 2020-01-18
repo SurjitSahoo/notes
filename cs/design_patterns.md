@@ -1,3 +1,8 @@
+* [JavaScript](#javaScipt)
+* [Python](#Python)
+
+<p id="javaScipt"></p>
+
 # Problem with global scope
 If we declare variable directly in global scope, anyone can accidentally modify it.
 ```js
@@ -277,6 +282,7 @@ E.g. visual objects creation on web relies on document. No it can be jQuery obje
 ## 1. Adapter
 
 <hr>
+<p id="Python"></p>
 <pre>
           🐍🐍    🐍    🐍  🐍🐍🐍🐍🐍  🐍    🐍    🐍🐍🐍    🐍      🐍
           🐍  🐍   🐍  🐍       🐍      🐍    🐍   🐍     🐍  🐍🐍    🐍
