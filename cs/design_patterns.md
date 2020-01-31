@@ -294,6 +294,7 @@ E.g. visual objects creation on web relies on document. No it can be jQuery obje
 <hr>
 
 <h1 align="center"> SOLID principles of programming</h1>
+
 Given by uncle Bob Martin
 
 ## Single Responsibility
@@ -372,20 +373,23 @@ Bad practice, because it might have been well tested and deployed, we need to ex
 Ans:
 
 ```python
-# Abstract class
-class Specification:
+from abc import ABCMeta, abstractmethod
+
+class Specification(metaclass=ABCMeta):
   def __and__(self, other):
     return AndSpecification(self, other)
   
   def __or__(self, other):
     return OrSpecification(self, other)
 
+  @abstractmethod
   def is_satisfied(self, item):
-    raise NotImplementedError("Interface not implemented")
+    pass
 
-class Filter:
+class Filter(metaclass=ABCMeta):
+  @abstractmethod
   def filter(self, items, spec):
-    raise NotImplementedError("Interface not implemented")
+    pass
 
 # Class implementations
 class ColorSpecification(Specification):
@@ -664,218 +668,164 @@ class Research:
 * Builder uses actual construction methods to build the objects, it's like a wrapper around actual construction methods which simplifies building.
 * Builder can use multiple classes / building blocks to build complex objects.
 
-e.g. HTML builder
+**e.g. HTML builder**
 
-```js
-// This is where actual HTML is constructed
-class Tag
-{
-  static get indentSize() { return 2; }
+```py
+# This is where actual HTML is constructed
+class HtmlElement:
+  indent_size = 2
+  def __init__(self, name='', text=''):
+    self.name = name
+    self.text = text
+    self.children = []
 
-  constructor(name='', text='')
-  {
-    this.name = name;
-    this.text = text;
-    this.children = [];
-  }
+  def __str(self, indent):
+    lines = []
+    i = ' ' * (indent * self.indent_size)
+    lines.append(f'{i}<{self.name}>')
 
-  toStringImpl(indent)  // traverse the tree and convert to string
-  {
-    let html = [];
-    let i = ' '.repeat(indent * Tag.indentSize);
-    html.push(`${i}<${this.name}>\n`);
-    if (this.text.length > 0)
-    {
-      html.push(' '.repeat(Tag.indentSize * (indent+1)));
-      html.push(this.text);
-      html.push('\n');
-    }
+    if self.text:
+      i1 = ' ' * ((indent + 1) * self.indent_size)
+      lines.append(f'{i1}{self.text}')
 
-    for (let child of this.children)
-      html.push(child.toStringImpl(indent+1));
+    for e in self.elements:
+      lines.append(e.__str(indent + 1))
 
-    html.push(`${i}</${this.name}>\n`);
-    return html.join();
-  }
+    lines.append(f'{i}</{self.name}>')
+    return '\n'.join(lines)
 
-  toString()
-  {
-    return this.toStringImpl(0);
-  }
 
-  static create(name)
-  {
-    return new HtmlBuilder(name);
-  }
-}
+  def __str__():
+    return self.__str(0)
 
-// help simplify building. Uses Tag class
-class HtmlBuilder
-{
-  constructor(rootName)
-  {
-    this.root = new Tag(rootName);
-    this.rootName = rootName;
-  }
+  @staticmethod
+  def create(name):
+    return HtmlBuilder(name)
 
-  // non-fluent
-  addChild(childName, childText)
-  {
-    let child = new Tag(childName, childText);
-    this.root.children.push(child);
-  }
 
-  // fluent
-  addChildFluent(childName, childText)
-  {
-    let child = new Tag(childName, childText);
-    this.root.children.push(child);
-    return this;
-  }
+# help simplify building. Uses Tag class
+class HtmlBuilder:
+  __root = HtmlElement()
+  def __init__(self, root_name):
+    self.root_name = root_name
+    self.__root_name = root_name
 
-  toString()
-  {
-    return this.root.toString();
-  }
+  def add_child(self, childName, childText):
+    self.__root.elements.append(
+      HtmlElement(childName, childText)
+    )
+  
+  def add_child_fluent(self, childName, childText):
+    self.__root.elements.append(
+      HtmlElement(childName, childText)
+    )
+    return self
 
-  clear() // remove all the children
-  {
-    this.root = new Tag(this.rootName);
-  }
+  def __str__():
+    return str(self.__root)
 
-  build() // get tag along with all the children
-  {
-    return this.root;
-  }
-}
+  def clear(self) # remove all the children
+    self.root = HtmlElement(name=self.root_name)
 
-// USAGE
+# USAGE
+builder = HtmlEBuilder('ul')
+# or
+builder = HtmlElement.create('ul')
 
-const words = ['hello', 'world'];
+builder.add_child('li', 'hello')
+builder.add_child('li', 'world')
+print(builder)
 
-let builder = new HtmlBuilder('ul');
-// or
-let builder = Tag.create('ul');
-
-for (let word of words) // non-fluent builder
-  builder.addChild('li', word);
-
-console.log(builder.toString());
-// or
-console.log( builder.build().toString());
-
-// fluent builder
-builder.clear();
+# fluent builder
+builder.clear()
 builder
-  .addChildFluent('li', 'foo')
-  .addChildFluent('li', 'bar')
-  .addChildFluent('li', 'baz');
-console.log(builder.toString());
+  .add_child_fluent('li', 'foo')
+  .add_child_fluent('li', 'bar')
+  .add_child_fluent('li', 'baz')
+print(builder)
 ```
 
-**Note:** Instead of using `Tag` directly, builder should be used.
-
 ## Interaction between builders
+To build complicated objects which require more than one builder
 
-```js
-class Person
-{
-  constructor()
-  {
-    // address info
-    this.streetAddress = this.postcode = this.city = '';
+```py
+class Person:
+  def __init__(self):
+    # address
+    self.streetAddress = None
+    self.postcode = None
+    self.city = None
 
-    // employment info
-    this.companyName = this.position = '';
-    this.annualIncome = 0;
-  }
+    # employment info
+    self.companyName = None
+    self.position = None
+    self.annualIncome = None
 
-  toString()
-  {
-    return `Person lives at ${this.streetAddress}, ${this.city}, ${this.postcode}\n`
-      + `and works at ${this.companyName} as a ${this.position} earning ${this.annualIncome}`;
-  }
-}
+  def __str__(self) -> str:
+    return f'Person lives at {self.streetAddress}, {self.city}, {self.postcode}\n'
+      + f'and works at {self.companyName} as a {self.position} earning {self.annualIncome}'
 
-class PersonBuilder
-{
-  constructor(person=new Person())
-  {
-    this.person = person;
-  }
+class PersonBuilder:
+  def __init__(self, person=None)
+    if person is None:
+      self.person = Person()
+    else: self.person = person
 
-  get lives()
-  {
-    return new PersonAddressBuilder(this.person);
-  }
+  @property
+  def lives(self):
+    return PersonAddressBuilder(self.person)
 
-  get works()
-  {
-    return new PersonJobBuilder(this.person);
-  }
+  @property
+  def works(self):
+    return PersonJobBuilder(self.person)
 
-  build()
-  {
-    return this.person;
-  }
-}
+  def build(self):
+    return self.person
 
-class PersonJobBuilder extends PersonBuilder
-{
-  constructor(person)
-  {
-    super(person);
-  }
 
-  at(companyName)
-  {
-    this.person.companyName = companyName;
-    return this;
-  }
+class PersonJobBuilder(PersonBuilder):
+  def __init__(self, person):
+    super().__init__(person)
 
-  asA(position)
-  {
-    this.person.position = position;
-    return this;
-  }
+  def at(self, company_name):
+    self.person.company_name = company_name
+    return self
 
-  earning(annualIncome)
-  {
-    this.person.annualIncome = annualIncome;
-    return this;
-  }
-}
+  def as_a(self, position):
+    self.person.position = position
+    return self
 
-class PersonAddressBuilder extends PersonBuilder
-{
-  constructor(person)
-  {
-    super(person);
-  }
+  def earning(self, annual_income):
+    self.person.annual_income = annual_income
+    return self
 
-  at(streetAddress)
-  {
-    this.person.streetAddress = streetAddress;
-    return this;
-  }
+class PersonAddressBuilder(PersonBuilder):
+  def __init__(self, person):
+    super().__init__(person)
 
-  withPostcode(postcode)
-  {
-    this.person.postcode = postcode;
-    return this;
-  }
+  def at(self, street_address):
+    self.person.street_address = street_address
+    return self
 
-  in(city)
-  {
-    this.person.city = city;
-    return this;
-  }
-}
+  def with_postcode(self, postcode):
+    self.person.postcode = postcode
+    return self
 
-let pb = new PersonBuilder();
-let person = pb
-  .lives.at('123 London Road').in('London').withPostcode('SW12BC')
-  .works.at('Fabrikam').asA('Engineer').earning(123000)
-  .build();
-console.log(person.toString());
+  def in_city(self, city):
+    self.person.city = city
+    return self
+
+
+pb = PersonBuilder()
+person = pb\
+          .lives\
+            .at('123 London Road')\
+            .in_city('London')\
+            .with_postcode('SW12BC')
+          .works\
+            .at('Fabrikam')
+            .as_a('Engineer')
+            .earning(123000)
+          .build()
+print(person)
 ```
