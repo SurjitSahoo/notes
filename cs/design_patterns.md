@@ -829,3 +829,46 @@ person = pb\
           .build()
 print(person)
 ```
+
+**NOTE :** This violates open close principle, as more builders are added we'll have to add it to the main builder.  
+solution
+
+```py
+class Person:
+  @staticmethod
+  def new():
+    return PersonBuilder()
+
+  def __str__(self):
+    return f'{self.name} works at {self.organization} as {self.position}'
+
+class BasePersonBuilder:
+  def __init__(self):
+    self.person = Person()
+  def build(self): return self.person
+
+class PersonInfoBuilder(BasePersonBuilder):
+  def named(self, name):
+    self.person.name = name
+    return self
+
+class PersonJobBuilder(PersonInfoBuilder):
+  def works_at(self, org):
+    self.person.organization = org
+    return self
+  def as_a(self, pos):
+    self.person.position = pos
+    return self
+
+class PersonBuilder(PersonJobBuilder):
+  pass
+
+me = Person.new()\
+      .named('sujit')\
+      .works_at('infosys')\
+      .as_a('consultant')\
+      .build()
+print(me)
+```
+
+# Factory
