@@ -984,3 +984,88 @@ def make_drink(type):
 tea = make_drink('tea')
 tea.consume()
 ```
+
+# Prototype
+
+If we have a prototype object (template), we can just perform deep copy on prototype and change properties appropriately.
+
+```py
+class Address:
+  def __init__(self, street, city, country):
+    self.street = street
+    self.city = city
+    self.country = country
+
+  def __str__(self):
+    return f'{self.street}, {self.city}, {self.country}'
+
+class Person:
+  def __init__(self, name, address):
+    self.name = name
+    self.address = address
+
+  def __str__(self):
+    return f'{self.name} lives at {self.address}'
+
+surjit = Person('Surjit', Address('sailashree vihar', 'Bhubaneswar', 'India'))
+
+
+from copy import deepcopy
+prachee = deepcopy(surjit)
+prachee.name = 'Prachu'
+prachee.address.street = 'phi robotics'
+prachee.address.city = 'Thane'
+```
+
+**Note :** We can't just assign `surjit` to `prachee`, because objects holds reference, if we modify `prachee`, `surjit` will be modified as well.
+
+But creating copy and changing values by hand is not good..
+
+## Prototype Factory
+
+```py
+from copy import deepcopy
+
+class Address:
+  def __init__(self, street, city, country):
+    self.street = street
+    self.city = city
+    self.country = country
+
+  def __str__(self):
+    return f'{self.street}, {self.city}, {self.country}'
+
+class Employee:
+  def __init__(self, name, id, address):
+    self.name = name
+    self.id = id
+    self.address = address
+
+  def __str__(self):
+    return f'{self.name}, Emp ID {self.id} works at {self.address}'
+
+# there are two ofc addresses
+class EmployeeFactory:
+  stp_employee = Employee("", 0, Address('STPI', 'Bhubaneswar', 'India'))
+  sez_employee = Employee("", 0, Address('SEZ', 'Bhubaneswar', 'India'))
+
+  @staticmethod
+  def __new_employee(proto, name, id):
+    result = deepcopy(proto)
+    result.name = name
+    result.id = id
+    return result
+
+  @staticmethod
+  def new_stp_employee(name, id):
+    return EmployeeFactory.__new_employee(
+      EmployeeFactory.stp_employee, name, id)
+
+  @staticmethod
+  def new_sez_employee(name, id):
+    return EmployeeFactory.__new_employee(
+      EmployeeFactory.sez_employee, name, id)
+
+surjit = EmployeeFactory.new_stp_employee('surjit', 22)
+prachu = EmployeeFactory.new_sez_employee('prachu', 23)
+```
