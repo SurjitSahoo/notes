@@ -872,3 +872,115 @@ print(me)
 ```
 
 # Factory
+
+Alternative to initializer, can provide better name, descriptive arguments. That's it.. noting special here.
+
+```py
+from enum import Enum
+from math import *
+class System(Enum):
+  CARTESIAN = 1
+  POLAR = 2
+
+class Point():
+  def __init__(self, a, b, system=System.CARTESIAN):
+    if system == System.CARTESIAN:
+      self.x = a
+      self.y = b
+    elif system == System.POLAR:
+      self.x = a * cos(b)
+      self.y = a * sin(b)
+```
+
+Here args are not descriptive and has lot more arguments than needed, imagine if we had more required arguments.. 💩
+
+```py
+# Solution
+from math import *
+
+class Point():
+  def __init__(self, x, y):
+    self.x = x
+    self.y = y
+  
+  @staticmethod
+  def create_cartesian_point(x, y):
+    return Point(x, y)
+
+  @staticmethod
+  def create_polar_point(rho, theta):
+    return Point(rho * cos(theta), rho * sin(theta))
+```
+
+When we have a lot of factories, it's better to export those to external class.
+
+```py
+from math import *
+
+class Point():
+  def __init__(self, x=0, y=0):
+    self.x = x
+    self.y = y
+
+class PointFactory:
+  @staticmethod
+  def create_cartesian_point(x, y):
+    return Point(x, y)
+
+  @staticmethod
+  def create_polar_point(rho, theta):
+    return Point(rho * cos(theta), rho * sin(theta))
+```
+
+**IMP :** How is the user going go know there's a factory for points?  
+He won't know.. we've to document it properly  
+or  
+We can just stick the factory class inside `Point`
+
+## Abstract Factory
+
+Abstract factory defines the interfaces, that's it. interfaces will be implemented in Concrete factory.  
+Useful when object is so complex so we'd want to define different factories for different objects of same family.  
+e.g. diff factories for Jaguar and Mercedes of Car family. where car will define interfaces and Jaguar and Mercedes will implement the methods.
+
+```py
+from abc import ABC, abstractmethod
+
+class HotDrink(ABC):
+  @abstractmethod
+  def consume(self):
+    pass
+
+class Tea(HotDrink):
+  def consume(self):
+    print('This tea is nice')
+
+class Coffee(HotDrink):
+  def consume(self):
+    print('This coffee is delicious')
+
+
+class HotDrinkFactory(ABC):
+  @abstractmethod
+  def prepare(self, amount):
+    pass
+
+class TeaFactory(HotDrinkFactory):
+  def prepare(self, amount=10):
+    print(f'{amount}ml, tea prepared')
+    return Tea()
+
+class CoffeeFactory(HotDrinkFactory):
+  def prepare(self, amount=10):
+    print(f'{amount}ml, coffee prepared')
+    return Coffee()
+
+def make_drink(type):
+  if type == 'tea':
+    return TeaFactory().prepare()
+  elif type == 'coffee':
+    return CoffeeFactory().prepare()
+
+tea = make_drink('tea')
+tea.consume()
+```
