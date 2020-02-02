@@ -1069,3 +1069,62 @@ class EmployeeFactory:
 surjit = EmployeeFactory.new_stp_employee('surjit', 22)
 prachu = EmployeeFactory.new_sez_employee('prachu', 23)
 ```
+
+# Singleton
+
+```py
+class Database:
+  _instance = None
+  def __init__(self): pass
+
+  def __new__(cls, *args, **kwargs):
+    if not cls._instance:
+      cls._instance = super().__new__(cls, *args, **kwargs)
+
+    return cls._instance
+
+d1 = Database()
+d2 = Database()
+print(d1 is d2)
+```
+
+### decorator
+
+```py
+def singleton(class_):
+  instances = {}
+
+  def get_instance(*args, **kwargs):
+    if class_ not in instances:
+      instances[class_] = class_(*args, **kwargs)
+    return instances[class_]
+
+  return get_instance
+
+@singleton
+class Database:
+  def __init__(self): pass
+
+d1 = Database()
+d2 = Database()
+print(d1 is d2)
+```
+
+### metaclass
+
+```py
+class Singleton(type):
+  _instances = {}
+
+  def __call__(cls, *args, **kwargs):
+    if cls not in cls._instances:
+      cls._instances[cls] = super().__call__(*args, **kwargs)
+    return cls._instances[cls]
+
+class Database(metaclass=Singleton):
+  def __init__(self): pass
+
+d1 = Database()
+d2 = Database()
+print(d1 is d2)
+```
