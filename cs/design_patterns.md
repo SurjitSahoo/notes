@@ -659,7 +659,7 @@ class Research:
       print(f'{parent} has a child called {child}')
 ```
 
-**<h1 align="center">Structural</h1>**
+**<h1 align="center">Creational Patterns</h1>**
 
 # Builder
 
@@ -1128,3 +1128,43 @@ d1 = Database()
 d2 = Database()
 print(d1 is d2)
 ```
+
+### mono-state
+
+```py
+class Base:
+  __template_data = {
+    'name': 'surjit',
+    'age', 24
+  }
+
+  def __init__(self):
+    self.__dict__ = self.__template_data
+
+# ====== OR ========
+
+class Monostate:
+  _shared_state = {}  # define shared data here
+
+  def __new__(cls, *args, **kwargs):
+    obj = super().__new__(cls, *args, **kwargs)
+    obj.__dict__ = cls._shared_state
+    return obj
+
+class Base(Monostate):
+  def __init__(self): pass
+```
+
+**NOTE :** Never hard code database connections or such things, it might mess with the live data when running unit tests. It must be always configurable.
+
+```py
+# metaclass example
+class Database(metaclass=Singleton):
+  def __init__(self, db=liveDB): pass
+```
+
+**<h1 align="center">Structural Patterns</h1>**
+
+# Adapter
+Adapter is a pice of code which is lets us use two incompatible apis together. like USB to Type-C adapter for example 😃
+
