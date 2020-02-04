@@ -1187,3 +1187,46 @@ def lineToPointsAdapter(list):
 ```
 
 # Bridge
+
+Bridge is meant to decouple abstraction from it's implementation, so that both can vary independently.
+
+```py
+# circle can be rendered in vector or raster form
+from abc import ABC
+class Renderer(ABC):
+  @abstractmethod
+  def render_circle(self, radius): pass
+
+class VectorRenderer(Renderer):
+  def render_circle(self, radius):
+    print(f'Drawing a circle of radius {radius} in VECTOR')
+
+class RasterRenderer(Renderer):
+  def render_circle(self, radius):
+    print(f'Drawing pixels for circle of radius {radius}')
+
+# How to connect renderer to shape?
+# Ans: pass it as argument
+
+class Shape:
+  def __init__(self, renderer):
+    self.renderer = renderer
+
+  def draw(self): pass
+  def resize(self, factor): pass
+
+class Circle(Shape):
+  def __init__(self, renderer, radius):
+    super().__init__(renderer)
+    self.radius = radius
+
+  def draw(self):
+    self.renderer.render_circle(self.radius) # call respective renderer
+
+  def resize(self, factor):
+    self.radius *= factor
+
+vector = VectorRenderer()
+circle = Circle(vector, 5)
+circle.draw()
+```
