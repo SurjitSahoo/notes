@@ -1168,3 +1168,22 @@ class Database(metaclass=Singleton):
 # Adapter
 Adapter is a pice of code which is lets us use two incompatible apis together. like USB to Type-C adapter for example 😃
 
+for repetitive conversion, we can use caching system.
+
+```py
+# API 1
+class Point:
+  def __init__(self, x, y): pass
+  def draw(self): pass
+
+# API 2
+class Line:
+  '''Takes coordinates of start and end'''
+  def __init__(self, start, end): pass
+
+# adapter to convert line to points
+def lineToPointsAdapter(list):
+  pass
+```
+
+# Bridge
