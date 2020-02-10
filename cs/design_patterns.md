@@ -1230,3 +1230,58 @@ vector = VectorRenderer()
 circle = Circle(vector, 5)
 circle.draw()
 ```
+
+# Composit
+
+Composite pattern is a partitioning design pattern and describes a group of objects that is treated the same way as a single instance of the same type of object. The intent of a composite is to “compose” objects into tree structures to represent part-whole hierarchies.
+
+it can act like a single object or a group of objects
+
+e.g. graphic object is a collection of graphic objects.
+
+```py
+class GraphicObject:
+  def __init__(self, color=None):
+    self.color = color
+    self.children = []
+    self._name = 'Group'
+
+  @property
+  def name(self):
+    return self._name
+
+  def _print(self, items, depth):
+    items.append('*' * depth)
+    if self.color:
+      items.append(self.color)
+    items.append(f'{self.name}\n')
+    for child in self.children:
+      child._print(items, depth + 1)
+  
+  def __str__(self):
+    items = []
+    self._print(items, 0)
+    return ''.join(items)
+
+class Circle(GraphicObject):
+  @property
+  def name(self): return 'Circle'
+
+class Square(GraphicObject):
+  @property
+  def name(self): return 'Square'
+
+
+# create drawing obj having square and circle as children
+drawing = GraphicObject()
+drawing.name = 'My Drawing'
+drawing.children.append(Square('Red'))
+drawing.children.append(Circle('Yellow'))
+
+# drawing obj can also have group of objects as it's children
+group = GraphicObject()
+group.children.append(Circle('Blue'))
+group.children.append(Circle('Green'))
+
+drawing.children.append(group)
+```
