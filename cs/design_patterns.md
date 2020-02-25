@@ -1498,3 +1498,78 @@ class FormattedText:
       result.append(c)
     return ''.join(result)
 ```
+
+# Proxy
+
+A proxy, in its most general form, is a class functioning as an interface to something else.
+
+## Protection Proxy
+
+```py
+class Car:
+  def __init__(self, driver):
+    self.driver = driver
+  
+  def drive(self):
+    print(f'Car is being driven by {self.driver.name}')
+
+class Driver:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+# Suppose we don't want to allow drivers younger than 25yrs old
+# we can't modify the above drive method, because it violates open-close principle
+
+class CarProxy:
+  def __init__(self, driver):
+    self.driver = driver
+    self.car = Car(driver)
+
+  def drive(self):
+    if self.driver.age >= 25:
+      self.car.drive()
+    else: print('Driver too young')
+```
+
+## Virtual Proxy
+
+It can look like underlying object but can be entirely different object having additional functionalities.
+
+```py
+# even if we don't draw, it still loads the image every time
+class Bitmap:
+  def __init__(self, filename):
+    self.filename = filename
+    print(f'Loading image from {filename}')
+
+  def draw(self):
+    print(f'Drawing image {self.filename}')
+
+# doesn't load the image until we draw for the first time.
+# it is using original class internally overriding the original object entirely
+class LazyBitmap:
+  def __init__(self, filename):
+  self.filename = filename
+  self.bitmap = None
+
+  def draw(self):
+    if not self.bitmap:
+      self.bitmap = Bitmap(self.filename)
+    self.bitmap.draw()
+
+def draw_image(image):
+  print('About to draw image')
+  image.draw()
+  print('Done drawing image')
+
+if __name__ == '__main__':
+  bmp = LazyBitmap('facepalm.jpg')  # Bitmap
+  draw_image(bmp)
+```
+
+## Proxy vs Decorator
+
+Proxy provides identical interface
+
+Decorator provides enhanced interface
