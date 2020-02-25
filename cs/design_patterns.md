@@ -1336,3 +1336,165 @@ if __name__ == '__main__':
   l1.connect_to(n2)
   l1.connect_to(l2)
 ```
+
+# Decorator
+
+**Need :** When we need to modify certain code and don't wanna violate `open-close` principle. modify functionality without altering the actual code.
+
+Takes a function as arg and returns modified version of arg
+
+## functional decorator of python
+
+```py
+import time
+
+def time_it(fun):
+  def wrapper(): # modified function
+    start = time.time()
+    result = func()
+    end = time.time()
+    print(f'{func.__name__} took {int((end-start)*100)}ms')
+    return result
+  return wrapper # return modified function
+
+@time_it
+def some_operation():
+  print('start op')
+  time.sleep(1)
+  print('done')
+  return 123
+```
+
+## Classic Decorator / oop decorator
+
+```py
+from abc import ABC
+
+class Shape(ABC):
+  def __str__(self): pass
+
+class Circle(Shape):
+  def __init__(self, radius=0):
+    self.radius = radius
+
+  def resize(self, factor):
+    self.radius *= factor
+
+  def __str__(self):
+    return f'Circle of radius {self.radius}'
+
+class ColoredShape(Shape):
+  def __init__(self, shape, color):
+    if isinstance(shape, ColoredShape):
+      raise Exception('Cannot apply ColoredDecorator twice')
+    self.shape = shape
+    self.color = color
+
+  def __str__(self):
+    return f'{self.color} colored {self.shape}'
+
+if __name__ = '__main__':
+  circle = Circle(5)
+  red_circle = ColoredShape(circle, red)
+```
+
+# Facade
+
+A facade is an object that serves as a front-facing interface masking more complex underlying or structural code.
+
+e.g. designing a terminal
+```py
+class Buffer:
+  def __init__(self, width=30, height=20):
+    self.width = width
+    self.height = height
+    self.buffer = [' '] * (width*height)
+
+  def __get_item__(self, item):
+    return self.buffer.__get_item__(item)
+
+  def write(self, text):
+    self.buffer += text
+
+class Viewport:
+  def __init__(self, buffer=Buffer()):
+    self.buffer = buffer
+    self.offset = 0
+
+  def get_char_at(self, index):
+    return self.buffer[self.offset+index]
+
+  def append(self, text):
+    self.buffer += text
+
+class Console:
+  def __init__(self):
+    b = Buffer()
+    self.current_viewport = Viewport(b)
+    self.buffers = [b]
+    self.viewports = [self.current_viewport]
+
+  # high-level api (hiding the complex code behind)
+  def write(self, text):
+    self.current_viewport.buffer.write(text)
+
+if __name__ == '__main__':
+  c = Console()
+  c.write('hello')
+```
+
+# Flyweight
+
+Space optimization technique. Avoid redundancy when storing data. e.g. plenty of users with identical first-name or last-name.
+
+**Idea :** have list of data and just point to the data when needed
+
+```py
+# e.g. 1
+class User:
+  strings = []
+
+  def __init__(self, full_name):
+    def get_or_add(s):
+      if s in self.strings:
+        return self.strings.index(s)
+      else:
+        self.strings.append(s)
+        return len(self.strings)-1
+    self.names = [get_or_add(x) for x in full_name.split(' ')]
+
+  def __str__(self):
+    return ' '.join([self.strings[x] for x in self.names])
+
+# e.g. 2
+class FormattedText:
+  def __init__(self, plain_text):
+    self.plain_text = plain_text
+    self.formatting = []
+
+  class TextRange:
+    def __init__(self, start, end, capitalize=False, bold=False, italic=False):
+      self.end = end
+      self.bold = bold
+      self.capitalize = capitalize
+      self.italic = italic
+      self.start = start
+
+    def covers(self, position):
+      return self.start <= position <= self.end
+
+  def get_range(self, start, end):
+    range = self.TextRange(start, end)
+    self.formatting.append(range)
+    return range
+
+  def __str__(self):
+    result = []
+    for i in range(len(self.plain_text)):
+      c = self.plain_text[i]
+      for r in self.formatting:
+        if r.covers(i) and r.capitalize:
+          c = c.upper()
+      result.append(c)
+    return ''.join(result)
+```
