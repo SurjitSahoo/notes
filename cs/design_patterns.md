@@ -1285,3 +1285,54 @@ group.children.append(Circle('Green'))
 
 drawing.children.append(group)
 ```
+
+e.g. Neurons, we can create layers of neurons, we can connect neuron-neuron, neuron-layer, layer-layer etc.
+
+```py
+from abc import ABC
+from collections.abc import Iterable
+
+class Connectable(Iterable, ABC):
+  def connect_to(self, other):
+    if self == other: return
+    for s in self:
+      for o in other:           # self ---> other
+        s.outputs.append(o)     # other.inputs = self(list)
+        o.inputs.append(s)      # self.outputs = other(list)
+
+class Neuron(Connectable):
+  def __init__(self, name):
+    self.name = name
+    self.inputs = []
+    self.outputs = []
+
+  def __str__(self):
+    return f'{name}, {len(self.inputs)} inputs, {len(self.outputs)} outputs'
+
+  def __iter__(self): # To make it iterable
+    yield self
+
+  # we don't want to define connect method here,
+  # then we've to define it in layer class as well
+
+class NeuronLayer(list, Connectable): # layer is basically a list of neurons
+  def __init__(self, name, count):
+    super().__init__()
+    self.name = name
+    for x in range(0, count):
+      self.append(Neuron(f'{name}-{x}')) #create list of neurons
+
+  def __str__(self):
+    return f'Layer {self.name} with {len(self)} neurons'
+
+if __name__ == '__main__':
+  n1 = Neuron('n1')
+  n2 = Neuron('n2')
+  l1 = NeuronLayer('l1')
+  l2 = NeuronLayer('l2')
+
+  n1.connect_to(n2)
+  n1.connect_to(l1)
+  l1.connect_to(n2)
+  l1.connect_to(l2)
+```
