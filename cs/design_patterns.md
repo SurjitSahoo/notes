@@ -1573,3 +1573,7 @@ if __name__ == '__main__':
 Proxy provides identical interface
 
 Decorator provides enhanced interface
+
+<h1 align="center">Behavioral Design Patterns</h1>
+
+# Chain of Responsibility
