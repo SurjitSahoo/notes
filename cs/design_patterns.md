@@ -295,7 +295,7 @@ E.g. visual objects creation on web relies on document. No it can be jQuery obje
 
 <h1 align="center"> SOLID principles of programming</h1>
 
-Given by uncle Bob Martin
+**Given by uncle Bob Martin**
 
 ## Single Responsibility
 One class should only care about one thing. e.g
@@ -1577,3 +1577,60 @@ Decorator provides enhanced interface
 <h1 align="center">Behavioral Design Patterns</h1>
 
 # Chain of Responsibility
+
+A chain of functions / methods should be able to solve a particular problem between themselves, one function can either solve the problem or pass it to the next one.
+
+for example, you have three payment methods(A, B and C) setup in your account; each having a different amount in it. A has $100, B has $300 and C has $1000 and the preference for payment is chosen as A then B then C. If you purchase something worth $150, first account A will be checked then B will be checked and because B has enough money to make the transaction, chain will break.
+
+```py
+from abc import ABC, abstractmethod
+
+class Account(ABC):
+  @abstractmethod
+  def __init__(self, balance):
+    self._successor = None
+    self.balance = balance
+
+  def setNext(self, account):
+    self._successor = account
+
+  def canPay(self, amount):
+    return self.balance >= amount
+
+  def pay(self, amount_to_pay):
+    if self.canPay(amount_to_pay):
+      print(f'Paid {amount_to_pay} using {self.__class__.__name__}')
+    elif self._successor:
+      print(f'Cannot pay using {self.__class__.__name__}. Proceeding...')
+      self._successor.pay(amount_to_pay)
+    else:
+      print("You don't have enough account balance")
+
+
+class Bank(Account):
+  def __init__(self, balance):
+    super().__init__(balance)
+
+class Wallet(Account):
+  def __init__(self, balance):
+    super().__init__(balance)
+
+class Bitcoin(Account):
+  def __init__(self, balance):
+    super().__init__(balance)
+
+bank = Bank(100)
+wallet = Wallet(200)
+bitcoin = Bitcoin(500)
+
+bank.setNext(wallet)
+wallet.setNext(bitcoin)
+
+bank.pay(210)
+
+# Output
+# -------------
+# Cannot pay using Bank. Proceeding...
+# Cannot pay using Wallet. Proceeding...
+# Paid 210 using Bitcoin
+```
