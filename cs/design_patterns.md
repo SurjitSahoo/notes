@@ -1634,3 +1634,193 @@ bank.pay(210)
 # Cannot pay using Wallet. Proceeding...
 # Paid 210 using Bitcoin
 ```
+
+# Command
+
+Used to decouple client from receiver.
+
+e.g. You(Client) ask the waiter(invoker) to bring the food(command) and waiter simply forwards the request to the Chef(receiver) who has the knowledge of what and how to cook.
+
+```py
+from abc import ABC, abstractmethod
+# Receiver
+class Bulb:
+  def turnOn(self):
+    print('Let there be light!')
+  def turnOff(self):
+    print('Andhera Kayam rahe!')
+
+# command interface
+class Command(ABC):
+  @abstractmethod
+  def execute(self): pass
+  @abstractmethod
+  def undo(self): pass
+  @abstractmethod
+  def redo(self): pass
+
+class TurnOn(Command):
+  def __init__(self, bulb):
+    self.bulb = bulb
+
+  def execute(self):
+    self.bulb.turnOn()
+
+  def undo(self):
+    self.bulb.turnOf()
+
+  def redo(self):
+    self.execute()
+
+# Invoker
+class RemoteControl:
+  def submit(self, command): command.execute()
+
+bulb = Bulb()
+turnOn = TurnOn(bulb)
+remote = RemoteControl()
+remote.submit(turnOn)
+
+```
+
+# Iterator
+
+Represents a way to access the elements of an object without exposing the underlying presentation.
+
+e.g. Radio or MP3 player where we can go to the next or previous channel by pressing a button.
+
+```py
+class RadioStation:
+  def __init__(self, freq):
+    self._frequency = freq
+  
+  @property
+  def frequency(self): return self._frequency
+  @frequency.setter
+  def frequency(self, freq): self._frequency = freq
+
+
+# iterator
+class StationList:
+  def __init__(self):
+    self.stations = []
+    self.counter = 0
+
+  def addStation(self, station):
+    self.stations.append(station)
+
+  def removeStation(self, station):
+    self.stations.remove(station)
+
+  def count(self): return len(self.stations)
+  def current(self): return self.stations[self.counter]
+  def key(self): return self.counter
+  def next(self): self.counter += 1
+  def prev(self): self.counter -= 1
+  def rewind(self): self.counter = 0
+```
+
+# Mediator
+
+It adds a third party object to control the interaction between two objects(colleagues). It helps reduce the coupling between classes because now they don't need to know each other's implementation
+
+e.g. If two people are talking to each other in phone, the network provider is the mediator
+
+```py
+# Mediator
+class ChatRoom:
+  def show_message(self, user, msg):
+    print(f'{user.name}: {msg}')
+
+class User:
+  def __init__(self, name, mediator):
+    self.name = name
+    self.mediator = mediator
+  
+  def send(self, msg):
+    self.mediator.show_message(self, msg)
+
+chat_room = ChatRoom()
+surjit = User('surjit', chat_room)
+prachee = User('prachee', chat_room)
+
+surjit.send('Hi prachu')
+prachee.send('Hey')
+```
+
+# Memento
+
+To store the current state of an object so that it can be restored later on. (undo)
+
+e.g. calculator stores the last result in memory so that you can get back to it using some button(i.e. caretaker)
+
+```py
+# Text editor undo
+class EditorMemento:
+  def __init__(self, content):
+    self.content = content
+
+class Editor:
+  def __init__(self): self.content = ''
+  def type(self, words): self.content = self.content + ' ' + words
+  def save(self): return EditorMemento(self.content)
+  def restore(self, memento): self.content = memento.content
+
+editor = Editor()
+editor.type('sentese one')
+editor.type('sentese two')
+
+saved = editor.save()
+editor.type('sentese three')
+
+editor.content # sentese one sentese two sentese three
+
+editor.restore(saved)
+editor.content # sentese one sentese two
+```
+
+# Observer
+
+Defines a dependency between objects so that whenever an object changes its state, all its dependents are notified.
+
+e.g. job seeker subscribes to some job posting site and they're notified whenever there's a matching job opportunity.
+
+```py
+class JobPost:
+  def __init__(self, title): self.title = title
+
+# Observer
+class JobSeeker:
+  def __init__(self, name): self.name = name
+  def on_job_posted(self, job):
+    print(f'Hi {self.name}! New job posted: {job.title}')
+
+class JobSite:
+  def __init__(self): self.job_seekers = []
+  
+  def notify(self, job_posting):
+    for job_seeker in self.job_seekers:
+      job_seeker.on_job_posted(job_posting)
+
+  def add_job_seeker(self, job_seeker):
+    self.job_seekers.append(job_seeker)
+
+  def add_job(self, job_posting):
+    self.notify(job_posting)
+
+
+surjit = JobSeeker('Surjit Sahoo')
+prachee = JobSeeker('Prachee Patil')
+
+naukri = JobSite()
+naukri.add_job_seeker(surjit)
+naukri.add_job_seeker(prachee)
+naukri.add_job('Web Developer')
+
+# Output
+# Hi Prachee Patil! New job posted: Web Developer
+# Hi Surjit Sahoo! New job posted: Web Developer
+```
+
+# Visitor
+
