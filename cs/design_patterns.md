@@ -1824,3 +1824,71 @@ naukri.add_job('Web Developer')
 
 # Visitor
 
+Allows to add further operations to objects without having to modify them.
+
+e.g. Consider someone visiting a zoo, they just need a way(i.e. ticket) to enter the zoo. After that they can visit any place they want inside the zoo without having to ask for any additional permission.
+
+```py
+from abc import ABC, abstractmethod
+
+# To be visited
+class Animal(ABC):
+  def accept(self, operation): pass
+
+# Visitor
+class AnimalOperation(ABC):
+  @abstractmethod
+  def visit_monkey(self, monkey): pass
+  @abstractmethod
+  def visit_lion(self, lion): pass
+  @abstractmethod
+  def visit_dolphin(self, lion): pass
+
+class Monkey(Animal):
+  def accept(self, operation):
+    operation.visit_monkey(self)
+
+class Lion(Animal):
+  def accept(self, operation):
+    operation.visit_lion(self)
+
+class Dolphin(Animal):
+  def accept(self, operation):
+    operation.visit_dolphin(self)
+
+# Implementing Visitor
+class Speak(AnimalOperation):
+  def visit_monkey(self, monkey): print('Tuut tuttu tuutt!'))
+  def visit_lion(self, lion): print('Roaaar!')
+  def visit_dolphin(self, dolphin): print('Ooo oo aa aa!')
+
+
+monkey = Monkey()
+lion = Lion()
+dolphin = Dolphin()
+
+speak = Speak()
+
+monkey.accept(speak)   # Ooo oo aa aa!
+lion.accept(speak)     # Roaaar!
+dolphin.accept(speak)  # Tuut tuttu tuutt!
+```
+
+We could have done this by having inheritance hierarchy for the animals but then we world have to modify the animals whenever we'd have to add new actions to the animals. But now we don't have to change them. Let's add jump behavior.
+
+```py
+class Jump(AnimalOperation):
+  def visit_monkey(self, monkey): print('Jumped 20 feet high! on to the tree!')
+  def visit_lion(self, lion): print('Jumped 7 feet! Back on the ground!')
+  def visit_dolphin(self, dolphin): print('Walked on water a little and disappeared')
+
+
+jump = Jump()
+
+monkey.accept(jump)   # Jumped 20 feet high! on to the tree!
+lion.accept(jump)     # Jumped 7 feet! Back on the ground!
+dolphin.accept(jump)  # Walked on water a little and disappeared
+```
+
+# Strategy
+
