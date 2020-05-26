@@ -1892,3 +1892,95 @@ dolphin.accept(jump)  # Walked on water a little and disappeared
 
 # Strategy
 
+Allows to switch algorithm or strategy based upon the situation
+
+e.g. bubble sort is faster for small data set but slow for large data set and quick sort is faster for larger data set and slow for small data set. With strategy pattern we can switch algorithm based on requirement.
+
+```py
+from abc import ABC, abstractmethod
+
+class SortStrategy(ABC):
+  @abstractmethod
+  def sort(self, dataset): pass
+
+class BubbleSort(SortStrategy):
+  def sort(self, dataset):
+    print('Sorting using buble sort')
+    return dataset
+
+class QuickSort(SortStrategy):
+  def sort(self, dataset):
+    print('Sorting using quick sort')
+    return dataset
+
+class Sorter:
+  def __init__(self, sorter):
+    self.sorter = sorter
+
+  def sort(self, dataset):
+    return self.sorter(dataset)
+
+dataset = [ 'array' ]
+sorter = Sorter(BubbleSort())
+sorter.sort(dataset)
+```
+
+# State
+
+Change the behavior of a class when the state changes.
+
+e.g. In drawing application, the pain brush changes it's behavior based on it's selected color(state).  
+In text editor, it types in bold if bold is selected.
+
+```py
+from abc import ABC, abstractmethod
+
+class WritingState(ABC):
+  @abstractmethod
+  def write(self, words): pass
+
+class UpperCase(WritingState):
+  def write(self, words): print(words.upper())
+
+class LowerCase(WritingState):
+  def write(self, words): print(words.lower())
+
+class DefaultText(WritingState):
+  def write(self, words): print(words)
+
+class TextEditor:
+  def __init__(self, state): self.state = state
+  def write(self, words):
+    self.state.write(words)
+
+
+editor = TextEditor(DefaultText())
+editor.write('First Line')
+
+editor.state = UpperCase()
+editor.write('Second Line')
+
+editor.state = LowerCase()
+editor.write('Third Line')
+
+# Output
+# First Line
+# SECOND LINE
+# third line
+```
+
+# Template Method
+
+Defines a skeleton of how a certain algorithm could be performed, but might defer in the implementation of those steps to the children classes
+
+e.g. To build a house we need following steps  
+1. Prepare the base
+2. Build the walls
+3. Add roof
+4. Add other floors
+
+The order of these steps could never be changed, but the steps can be alterd like floors can me made up of marble or cement.
+
+```py
+
+```
