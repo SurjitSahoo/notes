@@ -1982,5 +1982,54 @@ e.g. To build a house we need following steps
 The order of these steps could never be changed, but the steps can be alterd like floors can me made up of marble or cement.
 
 ```py
+from abc import ABC, abstractmethod
 
+# Template
+class Builder(ABC):
+  def build(self):
+    self.test()
+    self.lint()
+    self.assemble()
+    self.deploy()
+
+  @abstractmethod
+  def test(self): pass
+  @abstractmethod
+  def lint(self): pass
+  @abstractmethod
+  def assemble(self): pass
+  @abstractmethod
+  def deploy(self): pass
+
+# Implementation
+class AndroidBuilder(Builder):
+  def test(self): print('Running android tests')
+  def lint(self): print('Linting the android code')
+  def assemble(self): print('Assembling the android build')
+  def deploy(self): print('Deploying android build to server')
+
+class IOSBuilder(Builder):
+  def test(self): print('Running ios tests')
+  def lint(self): print('Linting the ios code')
+  def assemble(self): print('Assembling the ios build')
+  def deploy(self): print('Deploying ios build to server')
+
+# usage
+android_builder = AndroidBuilder()
+android_builder.build()
+
+# Output:
+# Running android tests
+# Linting the android code
+# Assembling the android build
+# Deploying android build to server
+
+ios_builder = AndroidBuilder()
+ios_builder.build()
+
+# Output:
+# Running ios tests
+# Linting the ios code
+# Assembling the ios build
+# Deploying ios build to server
 ```
