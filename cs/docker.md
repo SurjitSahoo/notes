@@ -41,7 +41,7 @@ docker rm --force containerName                     # delete container
 
 ## Dockerfile
 
-```sh
+```docker
 # Use the official image as a parent image.
 FROM node:current-slim
 
@@ -70,8 +70,9 @@ CMD [ "npm", "start" ]
 * Number of layers increases size of image. so reduce number of layers
 * only `RUN`, `COPY`, `ADD` adds layers to the image, other instructions create temporary intermediate images.
 * Whenever possible use multistage builds to minimize no of layers
+* **NOTE : Keeping COPY instruction at last ensures faster subsequent builds, because only project files will be changed and need rebuild, none of the above layers are changed. So the above layers can be cached.**
 
-```sh
+```docker
 FROM ubuntu as sample   #This has its own number of layers say "X"
 MAINTAINER FOO          #This is layer1
 RUN mkdir /tmp/foo      #This is layer2
@@ -80,9 +81,9 @@ RUN apt-get install vim #This is layer3
 
 ## Multi-stage build
 
-```sh
+```docker
 # Go app example
-FROM golang:1.11-alpine AS build
+FROM golang:1.11-alpine AS base
 # Run `docker build --no-cache .` to update dependencies
 RUN apk add --no-cache git
 RUN go get github.com/golang/dep/cmd/dep
@@ -96,41 +97,73 @@ RUN go build -o /bin/project
 
 # This results in a single layer image
 FROM scratch
-COPY --from=build /bin/project /bin/project
+# COPY --from=0 /bin/project /bin/project
+COPY --from=base /bin/project /bin/project
 ENTRYPOINT ["/bin/project"]
 CMD ["--help"]
 ```
 
+NOTE: By default stages are not named, they can be refereed by their integer number stating with zero (0) for the first `FROM` instruction. Stages can be named by adding `AS` to the `FROM` instruction.
+
+### You can use previous stage as new stage and pick up from where you left off.
+
+```docker
+FROM alpine:latest as builder
+RUN apk --no-cache add build-base
+
+FROM builder as build1
+COPY source1.cpp source.cpp
+RUN g++ -o /binary source.cpp
+```
+
 ### Dockerfile instructions / commands
 
+```docker
+FROM  : basis of our image
+FROM ubuntu
+
+WORKDIR: working directory in container
+WORKDIR /app/
+
+LABEL : add labels in our image 
+LABEL com.example.version="1.0.0-beta" \
+      vendor="Surjit Enterprises"
+
+RUN   : run shell commands
+RUN apt update && apt install -y \
+    curl \
+    python3
+
+CMD   : run software contained in our image
+CMD ["python", "index.py", "arg1", "arg2"]
+
+EXPOSE: port number for docker container to listen on
+EXPOSE: 80
+
+ENV   : set up environment variable for the application
+ENV PATH /usr/local/nginx/bin:$PATH => ensures CMD ["nginx"] works
+
+COPY  : copy files to image/container
+COPY project/files  /working/directory/in/image
+
+ADD   : similar to COPY with extra features like auto extraction of tar and remote url support
+ADD files.tar.xz /app/src/files
+
+ENTRYPOINT: allows to configure a container that will run as an executable.
+ENTRYPOINT ["s3cmd"]
+CMD ["--help"]
+$ docker run s3cmd
+
+VOLUME: storage area for any mutable data created by the container
 ```
-FROM      :   basis of our image
-LABEL     :   add labels in our image # LABEL com.example.version="1.0.0-beta" \
-                                              vendor="Surjit Enterprises"
-RUN       :   run shell commands # RUN apt update && apt install -y \
-                                            curl \
-                                            python3
-CMD       :   run software contained in our image
 
-```
+# Docker-Compose
 
-## Sharing Containers across the servers
+Compose is a tool for running multi-container docker applications.
 
-Registry: A collection of Repositories (an account basically)  
-Repository: A collection of images (only one repository for free)
-
-1. Create a docker id and login in docker CLI (https://hub.docker.com/)
-2. Tag your images
-3. Push your images (Publish)
-4. Go to the server and run the image
-
-```bash
-docker login                                        # login to docker registry
-docker tag ImageName username/repository:tag        # tag is optional, but docker uses it for version control
-docker tag demo surjitsizzler/repo:ver1             # example
-docker push username/repository:tag                 # publish
-docker run -p 4000:80 username/repository:tag       # run on another machine
-```
+* Define app's environment with a `Dockerfile`
+* Define services that make up your app in `docker-compose.yml` so they can run together in an isolated env.
+* Run `$ docker-compose up`
 
 ## Services (Docker-compose.yml)
 
@@ -142,42 +175,48 @@ docker run -p 4000:80 username/repository:tag       # run on another machine
 
 To create service create a file named `docker-compose.yml`
 
-```yaml
-version: "3"  # depends on docker version (https://docs.docker.com/compose/compose-file/)
+Following sample file has two services, i.e. web and redis.
+
+```yml
+version: "3"  # depends on docker version
 services:
   web:
-    # replace username/repo:tag with your name and image details
-    image: username/repo:tag
+    build: .  # use image built from Dockerfile in current directory
+    volumes:
+      - .: /code  # Mount project current directory on host to /code to edit code on the fly without rebuilding the image
+    environment:
+      FLASK_ENV: development # Run python flask in dev mode->auto reload the code on change
+      - "constraint:node==node-1"
     deploy:
-      replicas: 5
+      replicas: 5   # deploy 5 copies of the service
       resources:
         limits:
           cpus: "0.1"  # 10% of 1 core, 1.5-> 1.5 cores per instance
-          memory: 50M
+          memory: 50M  # 50 MB
       restart_policy:
         condition: on-failure
     ports:
       - "4000:80"    # redirect host's 4000 to docker's 80
     networks:
       - webnet   # clustering internal network
+  redis:
+    image: "redis:alpine"
+    environment:
+      - "constraint:node==node-1" # making sure both the services end up in same node
 networks:
   webnet:    # cluster config(empty: use defaults)
 ```
 
 ```bash
-# initialize swarm for clustering
-docker swarm init
-# deploy the app
-docker stack deploy -c docker-compose.yml a_name_for_the_app
-```
-
-```bash
-docker service ls -a                # list all the services
-docker service ps app_name          # list all the containers of that service(tasks)
-docker container ls -q              # list ids of containers
-
-docker stack rm app_name            # shutdown the app
-docker swarm leave --force          # shutdown swarm
+docker-compose up             # run the service(s)
+docker-compose up -d          # run the service(s) in the background
+docker-compose ps             # list running services
+docker-compose run            # run a specific command for a service
+docker-compose run web env    # list available env variable to the web service
+docker-compose stop           # stop the service
+docker-compose down           # take down the service(s) along with the containers(delete)
+docker-compose down --volumes # stop services, delete containers, remove mounted volumes
+docker-compose scale redis=3  # scale up redis(service) to 3 replicas
 ```
 
 **Swarm**
@@ -221,3 +260,23 @@ Out put will be `docker swarm join --token {token} {vm1-ip}:{port}` use it to jo
 
 > Only swarm managers can execute docker commands, workers are just for capacity
 
+
+
+
+# Sharing Containers across the servers
+
+Registry: A collection of Repositories (an account basically)  
+Repository: A collection of images (only one repository for free)
+
+1. Create a docker id and login in docker CLI (https://hub.docker.com/)
+2. Tag your images
+3. Push your images (Publish)
+4. Go to the server and run the image
+
+```bash
+docker login                                        # login to docker registry
+docker tag ImageName username/repository:tag        # tag is optional, but docker uses it for version control
+docker tag demo surjitsizzler/repo:ver1             # example
+docker push username/repository:tag                 # publish
+docker run -p 4000:80 username/repository:tag       # run on another machine
+```
