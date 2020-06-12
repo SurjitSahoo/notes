@@ -103,7 +103,7 @@ ENTRYPOINT ["/bin/project"]
 CMD ["--help"]
 ```
 
-NOTE: By default stages are not named, they can be refereed by their integer number stating with zero (0) for the first `FROM` instruction. Stages can be named by adding `AS` to the `FROM` instruction.
+> Note: By default stages are not named, they can be refereed by their integer number stating with zero (0) for the first `FROM` instruction. Stages can be named by adding `AS` to the `FROM` instruction.
 
 ### You can use previous stage as new stage and pick up from where you left off.
 
@@ -219,13 +219,74 @@ docker-compose down --volumes # stop services, delete containers, remove mounted
 docker-compose scale redis=3  # scale up redis(service) to 3 replicas
 ```
 
-**Swarm**
+> Note: If the container is using port in a swarm -> if the image or compose file has defined volume without specific mapping, in order to preserve the volume data, docker will schedule all the containers to be created on the same node, which will result into port clash(error)
+
+## Environment Variables
+
+```sh
+docker run -e VARIABLE=VALUE        # set env
+docker run -e variable1 variable2   # pass existing variables
+docker run --env-file=filename.env  # pass env variables defined in an external file
+```
+
+```yml
+service1:
+  environment:
+    - DEBUG=1   # set env
+    - DEBUG     # env is passed, the value will be searched
+
+service2:
+  env-file:
+    - filename.env  # env variables are defined in this file
+```
+
+Alternatively we can use `.env` file to define all the env variables at once. It will be automatically picked up by docker compose.
+
+```env
+# .env
+TAG=V 1.2
+```
+
+```yml
+# docker-compose.yml
+service1:
+  environment:
+    - TAG=${TAG}
+```
+
+#### Order of Precedence for resolving env variables
+
+* compose-file
+* Shell env variable
+* .env file (environment file)
+* Dockerfile
+* undefined
+
+> To check what are the resolved values of env variable, run `docker-compose config`
+
+#### Multiple compose files
+1. `docker-compose up` automatically takes `docker-compose.yml` file and `docker-compose.override.yml` and overrides the original compose file
+2. We can pass compose files with `-f` flag to `docker-compose` to specifically tell which compose files to take.
+3. **use case :** define compose files such as `docker-compose.yml`, `docker-compose.develop.yml` (development overrides / configurations) and `docker-compose.prod.yml` (production overrides / configurations)
+
+## Compose in production
+
+* Maintain a separate yml file for production configurations
+* After making changes to code always rebuild the images
+
+```sh
+docker-compose build service1       # rebuild image for service1
+docker-compose up --no-deps -d web  # --no-deps: don't touch dependency services
+```
+
+# Swarm
+
 A swarm is a group of machines(nodes) that are running docker and joined in a cluster.
 
 ```bash
 docker swarm init           # create swarm manager
 docker swarm join           # join a swarm cluter
-docker node ls							# list all the nodes in a swarm
+docker node ls              # list all the nodes in a swarm
 ```
 
 for testing create docker VMs
@@ -233,7 +294,7 @@ for testing create docker VMs
 ```bash
 docker-machine create --driver virtualbox vm1
 docker-machine create --driver virtualbox vm2
-sudo docker-machine ls                                # display IP of machines
+sudo docker-machine ls       # display IP of machines
 ```
 
 communicate with VMs
@@ -259,8 +320,6 @@ create swarm manager with `docke-machine ssh vm1 "docker swarm init --advertise-
 Out put will be `docker swarm join --token {token} {vm1-ip}:{port}` use it to join other VMs to swarm.
 
 > Only swarm managers can execute docker commands, workers are just for capacity
-
-
 
 
 # Sharing Containers across the servers
